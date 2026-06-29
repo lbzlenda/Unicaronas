@@ -7,9 +7,9 @@ import logo from "../assets/logo-unicaronas-removebg-preview.png";
 import { FiBell, FiLogOut, FiMenu, FiX, FiSettings } from "react-icons/fi";
 
 const ISLAND = {
-  background: "#FFFFFF",
-  borderBottom: "1px solid #E2E8F0",
-  boxShadow: "0 1px 8px rgba(0,0,0,0.06)",
+  background: "#1E3A5F",
+  borderBottom: "1px solid rgba(255,255,255,0.1)",
+  boxShadow: "0 2px 16px rgba(30,58,95,0.25)",
 };
 
 function NavLink({ to, active, children, onClick }) {
@@ -18,16 +18,16 @@ function NavLink({ to, active, children, onClick }) {
       to={to}
       onClick={onClick}
       className="relative px-4 py-2 text-base font-medium rounded-lg transition-all duration-200"
-      style={{ color: active ? "#6366f1" : "#64748B" }}
+      style={{ color: active ? "#fff" : "rgba(255,255,255,0.45)" }}
       onMouseEnter={e => {
         if (!active) {
-          e.currentTarget.style.color = "#0F172A";
-          e.currentTarget.style.background = "#F1F5F9";
+          e.currentTarget.style.color = "rgba(255,255,255,0.9)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.07)";
         }
       }}
       onMouseLeave={e => {
         if (!active) {
-          e.currentTarget.style.color = "#64748B";
+          e.currentTarget.style.color = "rgba(255,255,255,0.45)";
           e.currentTarget.style.background = "transparent";
         }
       }}
@@ -36,7 +36,7 @@ function NavLink({ to, active, children, onClick }) {
         <motion.span
           layoutId="nav-active"
           className="absolute inset-0 rounded-lg"
-          style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.25)" }}
+          style={{ background: "rgba(255,255,255,0.09)", border: "1px solid rgba(255,255,255,0.1)" }}
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
         />
       )}
@@ -88,16 +88,20 @@ export default function Header() {
       ];
 
   return (
-    /* Wrapper sticky transparente — não ocupa espaço visual fora da ilha */
     <motion.header
       className="sticky top-0 z-30 pointer-events-none"
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* A ilha em si */}
       <div className="w-full pointer-events-auto">
         <div className="relative px-6 flex items-center justify-between gap-4 h-20" style={ISLAND}>
+
+          {/* Linha índigo inferior */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.6) 30%, rgba(59,130,246,0.6) 60%, transparent)" }}
+          />
 
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
@@ -111,7 +115,7 @@ export default function Header() {
             <span
               className="font-extrabold text-lg hidden sm:inline"
               style={{
-                background: "linear-gradient(135deg, #6366f1, #3b82f6)",
+                background: "linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -137,9 +141,9 @@ export default function Header() {
                 <Link
                   to="/perfil"
                   className="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200"
-                  style={{ background: "#F8FAFC", border: "1px solid #E2E8F0" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#F1F5F9"}
-                  onMouseLeave={e => e.currentTarget.style.background = "#F8FAFC"}
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.11)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
                 >
                   {fotoUrl ? (
                     <img
@@ -156,19 +160,19 @@ export default function Header() {
                       {usuario.nome[0].toUpperCase()}
                     </div>
                   )}
-                  <span className="text-base font-medium" style={{ color: "#0F172A" }}>
+                  <span className="text-base font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>
                     {usuario.nome.split(" ")[0]}
                   </span>
                 </Link>
 
-                {/* Sino de notificações — só motoristas */}
+                {/* Sino — só motoristas */}
                 {isMotorista && (
                   <div className="relative" ref={sinoRef}>
                     <button
                       onClick={abrirSino}
                       className="relative p-2 rounded-lg transition-all duration-200"
-                      style={{ color: naoLidas > 0 ? "#fcd34d" : "#94A3B8" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "#EEF2FF"; }}
+                      style={{ color: naoLidas > 0 ? "#fcd34d" : "rgba(255,255,255,0.35)" }}
+                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                       title="Notificações"
                     >
@@ -186,7 +190,6 @@ export default function Header() {
                     <AnimatePresence>
                       {sinoAberto && (
                         <>
-                          {/* Overlay para fechar */}
                           <div className="fixed inset-0 z-40" onClick={() => setSinoAberto(false)} />
                           <motion.div
                             initial={{ opacity: 0, y: -8, scale: 0.97 }}
@@ -195,43 +198,40 @@ export default function Header() {
                             transition={{ duration: 0.18 }}
                             className="absolute right-0 top-full mt-2 w-80 rounded-2xl overflow-hidden z-50"
                             style={{
-                              background: "#FFFFFF",
-                              border: "1px solid #E2E8F0",
-                              boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                              background: "rgba(5,10,30,0.97)",
+                              backdropFilter: "blur(28px)",
+                              WebkitBackdropFilter: "blur(28px)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              boxShadow: "0 16px 48px rgba(0,0,0,0.5)",
                             }}
                           >
                             <div className="px-4 py-3 flex items-center justify-between"
-                              style={{ borderBottom: "1px solid #E2E8F0" }}>
-                              <span className="text-sm font-bold" style={{ color: "#0F172A" }}>Notificações</span>
+                              style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                              <span className="text-sm font-bold text-white">Notificações</span>
                               <button onClick={() => setSinoAberto(false)}
-                                className="transition"
-                                style={{ color: "#94A3B8" }}
-                                onMouseEnter={e => e.currentTarget.style.color = "#0F172A"}
-                                onMouseLeave={e => e.currentTarget.style.color = "#94A3B8"}
-                              >
+                                className="text-white/40 hover:text-white transition">
                                 <FiX size={14} />
                               </button>
                             </div>
                             <div className="max-h-72 overflow-y-auto">
                               {notificacoes.length === 0 ? (
                                 <div className="py-10 text-center">
-                                  <FiBell className="text-3xl mx-auto mb-2" style={{ color: "#E2E8F0" }} />
-                                  <p className="text-sm" style={{ color: "#94A3B8" }}>Nenhuma notificação ainda</p>
+                                  <FiBell className="text-white/15 text-3xl mx-auto mb-2" />
+                                  <p className="text-sm text-white/30">Nenhuma notificação ainda</p>
                                 </div>
                               ) : notificacoes.map((n) => (
                                 <div key={n.id}
                                   className="px-4 py-3 flex items-start gap-3 transition-colors"
                                   style={{
-                                    borderBottom: "1px solid #F1F5F9",
-                                    background: n.lida ? "transparent" : "#F5F7FF",
+                                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                                    background: n.lida ? "transparent" : "rgba(99,102,241,0.06)",
                                   }}
                                 >
                                   <div className="w-2 h-2 rounded-full mt-1.5 shrink-0"
-                                    style={{ background: n.lida ? "#E2E8F0" : "#6366f1" }} />
+                                    style={{ background: n.lida ? "rgba(255,255,255,0.15)" : "#818cf8" }} />
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm leading-snug" style={{ color: "#0F172A" }}>{n.mensagem}</p>
-                                    <p className="text-xs mt-0.5"
-                                      style={{ color: "#94A3B8" }}>
+                                    <p className="text-sm text-white/80 leading-snug">{n.mensagem}</p>
+                                    <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>
                                       {new Date(n.criada_em).toLocaleString("pt-BR", {
                                         day: "2-digit", month: "2-digit",
                                         hour: "2-digit", minute: "2-digit",
@@ -251,9 +251,9 @@ export default function Header() {
                 <Link
                   to="/configuracoes"
                   className="p-2 rounded-lg transition-all duration-200"
-                  style={{ color: "#94A3B8" }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "#6366f1"; e.currentTarget.style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.background = "transparent"; }}
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#a5b4fc"; e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; e.currentTarget.style.background = "transparent"; }}
                   title="Configurações"
                 >
                   <FiSettings className="text-lg" />
@@ -262,9 +262,9 @@ export default function Header() {
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-1.5 text-base px-3 py-2 rounded-lg transition-all duration-200"
-                  style={{ color: "#94A3B8" }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "#EF4444"; e.currentTarget.style.background = "#FEF2F2"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.background = "transparent"; }}
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#fca5a5"; e.currentTarget.style.background = "rgba(239,68,68,0.1)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; e.currentTarget.style.background = "transparent"; }}
                 >
                   <FiLogOut />
                   Sair
@@ -275,9 +275,9 @@ export default function Header() {
                 <Link
                   to="/login"
                   className="text-base font-medium px-4 py-2 rounded-lg transition-all duration-200"
-                  style={{ color: "#6366f1" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                  style={{ color: "rgba(255,255,255,0.55)" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.07)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.background = "transparent"; }}
                 >
                   Login
                 </Link>
@@ -301,13 +301,13 @@ export default function Header() {
           <button
             onClick={() => setMenuAberto((v) => !v)}
             className="sm:hidden p-2 rounded-lg transition-all"
-            style={{ color: "#64748B", background: "#F1F5F9" }}
+            style={{ color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.07)" }}
           >
             {menuAberto ? <FiX className="text-lg" /> : <FiMenu className="text-lg" />}
           </button>
         </div>
 
-        {/* Drawer mobile — aparece abaixo da ilha */}
+        {/* Drawer mobile */}
         <AnimatePresence>
           {menuAberto && (
             <motion.div
@@ -317,9 +317,11 @@ export default function Header() {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="mt-2 rounded-2xl overflow-hidden"
               style={{
-                background: "#FFFFFF",
-                border: "1px solid #E2E8F0",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                background: "rgba(5,10,30,0.96)",
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
               }}
             >
               <div className="px-3 py-3 space-y-0.5">
@@ -330,8 +332,8 @@ export default function Header() {
                     onClick={() => setMenuAberto(false)}
                     className="block px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
                     style={{
-                      color: pathname === link.to ? "#6366f1" : "#374151",
-                      background: pathname === link.to ? "#EEF2FF" : "transparent",
+                      color: pathname === link.to ? "#fff" : "rgba(255,255,255,0.5)",
+                      background: pathname === link.to ? "rgba(255,255,255,0.09)" : "transparent",
                     }}
                   >
                     {link.label}
@@ -339,22 +341,19 @@ export default function Header() {
                 ))}
               </div>
 
-              <div className="px-3 pb-3 pt-1" style={{ borderTop: "1px solid #E2E8F0" }}>
+              <div className="px-3 pb-3 pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
                 {usuario ? (
                   <>
                     <Link
                       to="/perfil"
                       onClick={() => setMenuAberto(false)}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all mb-0.5"
-                      style={{ color: "#0F172A" }}
+                      style={{ color: "rgba(255,255,255,0.75)" }}
                     >
                       {fotoUrl ? (
-                        <img
-                          src={fotoUrl}
-                          alt="Foto de perfil"
+                        <img src={fotoUrl} alt="Foto de perfil"
                           className="w-8 h-8 rounded-full object-cover shrink-0"
-                          style={{ border: "2px solid rgba(99,102,241,0.5)" }}
-                        />
+                          style={{ border: "2px solid rgba(99,102,241,0.5)" }} />
                       ) : (
                         <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
                           style={{ background: "linear-gradient(135deg,#3b82f6,#6366f1)" }}>
@@ -362,24 +361,22 @@ export default function Header() {
                         </div>
                       )}
                       <div>
-                        <p className="text-sm font-semibold" style={{ color: "#0F172A" }}>{usuario.nome.split(" ")[0]}</p>
-                        <p className="text-xs" style={{ color: "#94A3B8" }}>Ver perfil</p>
+                        <p className="text-sm font-semibold text-white">{usuario.nome.split(" ")[0]}</p>
+                        <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>Ver perfil</p>
                       </div>
                     </Link>
                     <Link
                       to="/configuracoes"
                       onClick={() => setMenuAberto(false)}
                       className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-                      style={{ color: "#64748B" }}
+                      style={{ color: "rgba(255,255,255,0.55)" }}
                     >
                       <FiSettings /> Configurações
                     </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-                      style={{ color: "#94A3B8" }}
-                      onMouseEnter={e => e.currentTarget.style.color = "#EF4444"}
-                      onMouseLeave={e => e.currentTarget.style.color = "#94A3B8"}
+                      style={{ color: "#fca5a5" }}
                     >
                       <FiLogOut /> Sair
                     </button>
@@ -389,8 +386,8 @@ export default function Header() {
                     <Link
                       to="/login"
                       onClick={() => setMenuAberto(false)}
-                      className="text-center text-sm font-medium py-2.5 rounded-xl transition-all"
-                      style={{ color: "#6366f1", background: "#EEF2FF" }}
+                      className="text-center text-sm font-medium py-2.5 rounded-xl"
+                      style={{ color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.06)" }}
                     >
                       Login
                     </Link>
