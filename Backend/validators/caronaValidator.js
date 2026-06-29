@@ -25,6 +25,7 @@ const caronaSchema = z.object({
     .max(4, "Máximo de 4 vagas"),
   lat: z.number().optional().nullable(),
   lng: z.number().optional().nullable(),
+  semanas: z.number().int().min(1).max(8).optional().default(1),
 });
 
 module.exports = { caronaSchema, DESTINOS };

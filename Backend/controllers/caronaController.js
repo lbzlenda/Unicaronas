@@ -50,38 +50,89 @@ function minhasCaronas(req, res, next) {
   }
 }
 
-/* POST /api/caronas — motorista publica nova carona */
+/* POST /api/caronas — motorista publica nova carona (suporta semanas=N para criar N cópias semanais) */
 function criarCarona(req, res, next) {
   try {
     const dados = caronaSchema.parse(req.body);
+    const semanas = Math.min(8, Math.max(1, parseInt(req.body.semanas) || 1));
 
-    const { lastInsertRowid } = db
-      .prepare(`
-        INSERT INTO caronas (motorista_id, origem, destino, data_saida, horario_saida, valor, vagas, vagas_disponiveis, lat, lng)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `)
-      .run(
-        req.usuario.id,
-        dados.origem,
-        dados.destino,
-        dados.data_saida ?? null,
-        dados.horario_saida,
-        dados.valor,
-        dados.vagas,
-        dados.vagas,
-        dados.lat ?? null,
-        dados.lng ?? null,
-      );
+    const inserir = db.prepare(`
+      INSERT INTO caronas (motorista_id, origem, destino, data_saida, horario_saida, valor, vagas, vagas_disponiveis, lat, lng)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
 
-    const carona = db
-      .prepare("SELECT * FROM caronas WHERE id = ?")
-      .get(Number(lastInsertRowid));
+    const { lastInsertRowid } = inserir.run(
+      req.usuario.id,
+      dados.origem,
+      dados.destino,
+      dados.data_saida ?? null,
+      dados.horario_saida,
+      dados.valor,
+      dados.vagas,
+      dados.vagas,
+      dados.lat ?? null,
+      dados.lng ?? null,
+    );
 
-    res.status(201).json(carona);
+    if (semanas > 1 && dados.data_saida) {
+      for (let i = 1; i < semanas; i++) {
+        const base = new Date(dados.data_saida + "T12:00:00");
+        base.setDate(base.getDate() + 7 * i);
+        const novaData = base.toISOString().split("T")[0];
+        inserir.run(
+          req.usuario.id, dados.origem, dados.destino, novaData,
+          dados.horario_saida, dados.valor, dados.vagas, dados.vagas,
+          dados.lat ?? null, dados.lng ?? null,
+        );
+      }
+    }
+
+    const carona = db.prepare("SELECT * FROM caronas WHERE id = ?").get(Number(lastInsertRowid));
+    res.status(201).json({ ...carona, semanas });
   } catch (err) {
     if (err.name === "ZodError") {
       return res.status(400).json({ mensagem: err.errors[0].message });
     }
+    next(err);
+  }
+}
+
+/* GET /api/caronas/dashboard — resumo de ganhos para o motorista autenticado */
+function dashboard(req, res, next) {
+  try {
+    const id = req.usuario.id;
+
+    const { total_concluidas } = db.prepare(
+      "SELECT COUNT(*) AS total_concluidas FROM caronas WHERE motorista_id = ? AND status = 'concluida'"
+    ).get(id);
+
+    const { total_passageiros } = db.prepare(`
+      SELECT COUNT(*) AS total_passageiros
+      FROM reservas r
+      JOIN caronas c ON c.id = r.carona_id
+      WHERE c.motorista_id = ? AND c.status = 'concluida'
+    `).get(id);
+
+    const { total_ganho } = db.prepare(`
+      SELECT COALESCE(SUM(c.valor * (c.vagas - c.vagas_disponiveis)), 0) AS total_ganho
+      FROM caronas c
+      WHERE c.motorista_id = ? AND c.status = 'concluida'
+    `).get(id);
+
+    const por_mes = db.prepare(`
+      SELECT
+        strftime('%Y-%m', c.data_saida) AS mes,
+        COUNT(*) AS caronas,
+        COALESCE(SUM(c.valor * (c.vagas - c.vagas_disponiveis)), 0) AS ganho
+      FROM caronas c
+      WHERE c.motorista_id = ? AND c.status = 'concluida' AND c.data_saida IS NOT NULL
+      GROUP BY mes
+      ORDER BY mes DESC
+      LIMIT 6
+    `).all(id);
+
+    res.json({ total_concluidas, total_passageiros, total_ganho, por_mes: por_mes.reverse() });
+  } catch (err) {
     next(err);
   }
 }
@@ -243,4 +294,4 @@ function passageirosDaCarona(req, res, next) {
   }
 }
 
-module.exports = { listarCaronas, minhasCaronas, criarCarona, excluirCarona, reservarVaga, atualizarStatus, passageirosDaCarona };
+module.exports = { listarCaronas, minhasCaronas, criarCarona, excluirCarona, reservarVaga, atualizarStatus, passageirosDaCarona, dashboard };

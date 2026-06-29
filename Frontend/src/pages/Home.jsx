@@ -26,6 +26,7 @@ import {
   FiZap,
   FiChevronLeft,
   FiChevronRight,
+  FiBarChart2,
 } from "react-icons/fi";
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
@@ -605,7 +606,7 @@ function MotoristaView({ navigate }) {
       </div>
 
       {/* Action cards */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -651,6 +652,30 @@ function MotoristaView({ navigate }) {
           </div>
           <span className="mt-auto text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors">
             Ver caronas →
+          </span>
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate("/dashboard")}
+          className="group flex flex-col items-start gap-4 rounded-2xl p-6 text-left transition-colors duration-200 sm:col-span-2 lg:col-span-1"
+          style={GLASS}
+        >
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #10b981, #14b8a6)", boxShadow: "0 4px 16px rgba(16,185,129,0.4)" }}>
+            <FiBarChart2 className="text-white text-xl" />
+          </div>
+          <div>
+            <p className="font-bold text-white text-base mb-1 group-hover:text-emerald-300 transition-colors">
+              Dashboard de ganhos
+            </p>
+            <p className="text-sm text-white/40 leading-relaxed">
+              Veja seu histórico de receita e caronas concluídas por mês.
+            </p>
+          </div>
+          <span className="mt-auto text-xs font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors">
+            Ver ganhos →
           </span>
         </motion.button>
       </div>

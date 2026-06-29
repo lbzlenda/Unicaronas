@@ -146,6 +146,9 @@ function OferecerCarona() {
   const republicar = location.state?.carona;
 
   const [sucesso, setSucesso] = useState(false);
+  const [semanasCount, setSemanasCount] = useState(0);
+  const [recorrente, setRecorrente] = useState(false);
+  const [semanas, setSemanas] = useState(2);
   const [lat, setLat] = useState(republicar?.lat ?? null);
   const [lng, setLng] = useState(republicar?.lng ?? null);
   const [buscandoGps, setBuscandoGps] = useState(false);
@@ -215,11 +218,15 @@ function OferecerCarona() {
 
   async function onSubmit(dados) {
     try {
-      await api.post("/caronas", { ...dados, lat: lat ?? null, lng: lng ?? null });
+      const qtd = recorrente ? semanas : 1;
+      await api.post("/caronas", { ...dados, lat: lat ?? null, lng: lng ?? null, semanas: qtd });
+      setSemanasCount(qtd);
       setSucesso(true);
       reset();
       setLat(null);
       setLng(null);
+      setRecorrente(false);
+      setSemanas(2);
     } catch (err) {
       toast.error(err.response?.data?.mensagem || "Não foi possível cadastrar a carona. Tente novamente.");
     }
@@ -239,9 +246,13 @@ function OferecerCarona() {
             style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)" }}>
             <FiCheckCircle className="text-emerald-400 text-3xl" />
           </div>
-          <h2 className="text-xl font-bold text-white mb-2">Carona cadastrada!</h2>
+          <h2 className="text-xl font-bold text-white mb-2">
+            {semanasCount > 1 ? `${semanasCount} caronas cadastradas!` : "Carona cadastrada!"}
+          </h2>
           <p className="text-white/40 text-sm mb-6">
-            Sua carona já está visível para os passageiros na página inicial.
+            {semanasCount > 1
+              ? `Criamos ${semanasCount} caronas semanais a partir da data escolhida.`
+              : "Sua carona já está visível para os passageiros na página inicial."}
           </p>
           <div className="flex flex-col gap-2">
             <button
@@ -388,6 +399,59 @@ function OferecerCarona() {
                   registration={register("vagas", { valueAsNumber: true })}
                 />
               </Campo>
+            </div>
+
+            {/* Repetição semanal */}
+            <div
+              className="rounded-xl p-4"
+              style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}
+            >
+              <label className="flex items-center gap-3 cursor-pointer select-none">
+                <div
+                  onClick={() => setRecorrente(r => !r)}
+                  className="w-10 h-5.5 rounded-full relative transition-all cursor-pointer shrink-0"
+                  style={{
+                    background: recorrente ? "linear-gradient(135deg,#6366f1,#3b82f6)" : "rgba(255,255,255,0.1)",
+                    border: recorrente ? "none" : "1px solid rgba(255,255,255,0.15)",
+                    padding: "2px",
+                    width: "40px",
+                    height: "22px",
+                  }}
+                >
+                  <div
+                    className="absolute top-[2px] rounded-full bg-white transition-all"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      left: recorrente ? "20px" : "2px",
+                    }}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-white/80">Repetir semanalmente</p>
+                  <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
+                    Cria cópias desta carona automaticamente para as próximas semanas
+                  </p>
+                </div>
+              </label>
+              {recorrente && (
+                <div className="mt-3 flex items-center gap-3">
+                  <span className="text-sm text-white/60">Repetir por</span>
+                  <select
+                    value={semanas}
+                    onChange={e => setSemanas(Number(e.target.value))}
+                    className="rounded-lg px-3 py-1.5 text-sm font-semibold text-white focus:outline-none"
+                    style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.4)" }}
+                  >
+                    {[2, 3, 4, 5, 6, 7, 8].map(n => (
+                      <option key={n} value={n} style={{ background: "#0f172a" }}>
+                        {n} semanas
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-xs text-white/30">= {semanas} caronas no total</span>
+                </div>
+              )}
             </div>
 
             <button

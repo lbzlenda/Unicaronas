@@ -6,6 +6,7 @@ const caronasRoutes       = require("./routes/caronas.js");
 const reservasRoutes      = require("./routes/reservas.js");
 const avaliacoesRoutes    = require("./routes/avaliacoes.js");
 const notificacoesRoutes  = require("./routes/notificacoes.js");
+const mensagensRoutes     = require("./routes/mensagens.js");
 const errorHandler        = require("./middlewares/errorHandler.js");
 
 const app  = express();
@@ -21,6 +22,7 @@ app.use("/api/caronas",   caronasRoutes);
 app.use("/api/reservas",  reservasRoutes);
 app.use("/api/avaliacoes",    avaliacoesRoutes);
 app.use("/api/notificacoes", notificacoesRoutes);
+app.use("/api/mensagens",   mensagensRoutes);
 
 // Rota raiz — health check
 app.get("/", (_, res) => res.json({ ok: true, projeto: "UniCaronas API" }));

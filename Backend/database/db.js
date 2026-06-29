@@ -99,4 +99,16 @@ try { db.exec("ALTER TABLE usuarios ADD COLUMN bio TEXT"); } catch {}
 try { db.exec("ALTER TABLE usuarios ADD COLUMN reset_token TEXT"); } catch {}
 try { db.exec("ALTER TABLE usuarios ADD COLUMN reset_expiry TEXT"); } catch {}
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS mensagens (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    reserva_id    INTEGER NOT NULL,
+    remetente_id  INTEGER NOT NULL,
+    conteudo      TEXT    NOT NULL,
+    criada_em     TEXT    DEFAULT (datetime('now')),
+    FOREIGN KEY (reserva_id)   REFERENCES reservas(id)  ON DELETE CASCADE,
+    FOREIGN KEY (remetente_id) REFERENCES usuarios(id)  ON DELETE CASCADE
+  )
+`);
+
 module.exports = db;

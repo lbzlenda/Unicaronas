@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ChatModal from "../components/ChatModal.jsx";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axiosConfig.js";
@@ -23,6 +24,7 @@ import {
   FiCheckSquare,
   FiChevronDown,
   FiChevronUp,
+  FiMessageCircle,
 } from "react-icons/fi";
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { FaWhatsapp, FaStar } from "react-icons/fa";
@@ -140,7 +142,7 @@ const STATUS_META = {
   concluida:    { label: "Concluída",    cor: "#a5b4fc", bg: "rgba(99,102,241,0.15)",  border: "rgba(99,102,241,0.3)"  },
 };
 
-function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onStatus, atualizandoStatus, aba, avaliacoesMotorista, onAvaliarPassageiro, buscarPassageiros }) {
+function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onStatus, atualizandoStatus, aba, avaliacoesMotorista, onAvaliarPassageiro, buscarPassageiros, onAbrirChat }) {
   const [confirmando, setConfirmando] = useState(false);
   const [passageiros, setPassageiros] = useState(null);
   const [carregandoPassageiros, setCarregandoPassageiros] = useState(false);
@@ -322,12 +324,24 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                         )}
                       </div>
                     </div>
-                    {aba === "historico" && (
-                      <StarRating
-                        value={avaliacoesMotorista?.[p.reserva_id] || 0}
-                        onChange={nota => onAvaliarPassageiro(p.reserva_id, nota)}
-                      />
-                    )}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {aba === "historico" && (
+                        <StarRating
+                          value={avaliacoesMotorista?.[p.reserva_id] || 0}
+                          onChange={nota => onAvaliarPassageiro(p.reserva_id, nota)}
+                        />
+                      )}
+                      <button
+                        onClick={() => onAbrirChat(p.reserva_id, p.nome?.split(" ")[0], p.foto_perfil)}
+                        title="Abrir chat"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
+                        style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc" }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.3)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.15)"; }}
+                      >
+                        <FiMessageCircle size={13} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -413,7 +427,7 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
   );
 }
 
-function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando, onCancelar }) {
+function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando, onCancelar, onAbrirChat }) {
   const [confirmandoCancelar, setConfirmandoCancelar] = useState(false);
   const [notaSelecionada, setNotaSelecionada] = useState(avaliacaoAtual || 0);
   const [enviandoAvaliacao, setEnviandoAvaliacao] = useState(false);
@@ -532,6 +546,19 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
                 </motion.a>
               )}
 
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => onAbrirChat(reserva.id, reserva.carona?.motorista_nome?.split(" ")[0] ?? "Motorista", null)}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all"
+                style={{ background: "rgba(99,102,241,0.1)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.25)" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.18)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
+              >
+                <FiMessageCircle size={14} />
+                Chat com motorista
+              </motion.button>
+
               {/* Cancelar reserva */}
               <AnimatePresence mode="wait">
                 {confirmandoCancelar ? (
@@ -605,6 +632,7 @@ function MinhasCaronas() {
   const [aba, setAba] = useState("ativas");
   const [avaliacoes, setAvaliacoes] = useState({});
   const [avaliacoesMotorista, setAvaliacoesMotorista] = useState({});
+  const [chatAberto, setChatAberto] = useState(null);
 
   const hoje = new Date().toISOString().split("T")[0];
   const getDataItem = (item) => isMotorista ? item.data_saida : item.carona?.data_saida;
@@ -703,6 +731,10 @@ function MinhasCaronas() {
   async function buscarPassageiros(caronaId) {
     const { data } = await api.get(`/caronas/${caronaId}/passageiros`);
     return data;
+  }
+
+  function handleAbrirChat(reservaId, nomeContato, fotoContato) {
+    setChatAberto({ reservaId, nomeContato, fotoContato });
   }
 
   return (
@@ -856,6 +888,7 @@ function MinhasCaronas() {
                     avaliacoesMotorista={avaliacoesMotorista}
                     onAvaliarPassageiro={handleAvaliarPassageiro}
                     buscarPassageiros={buscarPassageiros}
+                    onAbrirChat={handleAbrirChat}
                   />
                 </motion.div>
               ))
@@ -869,12 +902,22 @@ function MinhasCaronas() {
                   onAvaliar={handleAvaliar}
                   cancelando={cancelando}
                   onCancelar={handleCancelar}
+                  onAbrirChat={handleAbrirChat}
                 />
               ))
             )}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {chatAberto && (
+        <ChatModal
+          reservaId={chatAberto.reservaId}
+          nomeContato={chatAberto.nomeContato}
+          fotoContato={chatAberto.fotoContato}
+          onClose={() => setChatAberto(null)}
+        />
+      )}
     </div>
   );
 }
