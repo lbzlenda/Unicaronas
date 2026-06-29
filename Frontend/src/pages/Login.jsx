@@ -123,6 +123,11 @@ export default function Login() {
             Cadastre-se grátis
           </Link>
         </p>
+        <p className="text-center text-white/20 text-sm mt-3">
+          <Link to="/esqueci-senha" className="hover:text-white/40 transition">
+            Esqueceu sua senha?
+          </Link>
+        </p>
         <p className="text-center text-white/20 text-xs mt-4">
           CEULP · UFT · UniCatólica · Afya · IFTO · ITOP
         </p>

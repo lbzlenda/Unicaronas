@@ -72,6 +72,20 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS avaliacoes_motorista (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    reserva_id      INTEGER NOT NULL UNIQUE,
+    motorista_id    INTEGER NOT NULL,
+    passageiro_id   INTEGER NOT NULL,
+    nota            INTEGER NOT NULL CHECK(nota BETWEEN 1 AND 5),
+    criada_em       TEXT    DEFAULT (datetime('now')),
+    FOREIGN KEY (reserva_id)    REFERENCES reservas(id)  ON DELETE CASCADE,
+    FOREIGN KEY (motorista_id)  REFERENCES usuarios(id)  ON DELETE CASCADE,
+    FOREIGN KEY (passageiro_id) REFERENCES usuarios(id)  ON DELETE CASCADE
+  )
+`);
+
 // Migrações: adicionam colunas sem quebrar bancos existentes
 try { db.exec("ALTER TABLE usuarios ADD COLUMN telefone TEXT"); } catch {}
 try { db.exec("ALTER TABLE usuarios ADD COLUMN placa TEXT"); } catch {}
@@ -82,5 +96,7 @@ try { db.exec("ALTER TABLE caronas ADD COLUMN lng REAL"); } catch {}
 try { db.exec("ALTER TABLE caronas ADD COLUMN status TEXT DEFAULT 'ativa'"); } catch {}
 try { db.exec("ALTER TABLE usuarios ADD COLUMN foto_perfil TEXT"); } catch {}
 try { db.exec("ALTER TABLE usuarios ADD COLUMN bio TEXT"); } catch {}
+try { db.exec("ALTER TABLE usuarios ADD COLUMN reset_token TEXT"); } catch {}
+try { db.exec("ALTER TABLE usuarios ADD COLUMN reset_expiry TEXT"); } catch {}
 
 module.exports = db;

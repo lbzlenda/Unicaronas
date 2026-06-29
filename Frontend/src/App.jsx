@@ -13,6 +13,7 @@ import Configuracoes from "./pages/Configuracoes.jsx";
 import Sobre from "./pages/Sobre.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import PerfilMotorista from "./pages/PerfilMotorista.jsx";
+import EsqueciSenha from "./pages/EsqueciSenha.jsx";
 import RotaProtegida from "./routes/RotaProtegida.jsx";
 
 function RotasAnimadas() {
@@ -25,6 +26,7 @@ function RotasAnimadas() {
         <Route path="/motorista/:id" element={<PageTransition><PerfilMotorista /></PageTransition>} />
         <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
         <Route path="/cadastro" element={<PageTransition><Cadastro /></PageTransition>} />
+        <Route path="/esqueci-senha" element={<PageTransition><EsqueciSenha /></PageTransition>} />
 
         <Route element={<RotaProtegida />}>
           <Route path="/oferecer" element={<PageTransition><OferecerCarona /></PageTransition>} />

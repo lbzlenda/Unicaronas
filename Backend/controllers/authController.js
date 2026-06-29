@@ -214,4 +214,57 @@ function perfilPublico(req, res, next) {
   }
 }
 
-module.exports = { cadastro, login, meuPerfil, atualizarPerfil, atualizarFoto, alterarSenha, deletarConta, perfilPublico };
+async function esqueciSenha(req, res, next) {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ mensagem: "E-mail obrigatório." });
+
+    const usuario = db.prepare("SELECT id FROM usuarios WHERE email = ?").get(email);
+    if (!usuario) {
+      return res.json({ mensagem: "Se este e-mail estiver cadastrado, você receberá o código." });
+    }
+
+    const codigo = String(Math.floor(100000 + Math.random() * 900000));
+    const expiry = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    db.prepare("UPDATE usuarios SET reset_token = ?, reset_expiry = ? WHERE id = ?")
+      .run(codigo, expiry, usuario.id);
+
+    res.json({ mensagem: "Código gerado com sucesso.", codigo });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function redefinirSenha(req, res, next) {
+  try {
+    const { email, codigo, nova_senha } = req.body;
+    if (!email || !codigo || !nova_senha) {
+      return res.status(400).json({ mensagem: "E-mail, código e nova senha são obrigatórios." });
+    }
+    if (nova_senha.length < 6) {
+      return res.status(400).json({ mensagem: "A senha deve ter pelo menos 6 caracteres." });
+    }
+
+    const usuario = db
+      .prepare("SELECT id, reset_token, reset_expiry FROM usuarios WHERE email = ?")
+      .get(email);
+
+    if (!usuario || usuario.reset_token !== String(codigo)) {
+      return res.status(400).json({ mensagem: "Código inválido ou expirado." });
+    }
+    if (!usuario.reset_expiry || new Date(usuario.reset_expiry) < new Date()) {
+      return res.status(400).json({ mensagem: "Código expirado. Solicite um novo." });
+    }
+
+    const senhaHash = await bcrypt.hash(nova_senha, 10);
+    db.prepare("UPDATE usuarios SET senha = ?, reset_token = NULL, reset_expiry = NULL WHERE id = ?")
+      .run(senhaHash, usuario.id);
+
+    res.json({ mensagem: "Senha redefinida com sucesso." });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { cadastro, login, meuPerfil, atualizarPerfil, atualizarFoto, alterarSenha, deletarConta, perfilPublico, esqueciSenha, redefinirSenha };

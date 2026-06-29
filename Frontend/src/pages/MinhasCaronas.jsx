@@ -21,6 +21,8 @@ import {
   FiRefreshCw,
   FiNavigation,
   FiCheckSquare,
+  FiChevronDown,
+  FiChevronUp,
 } from "react-icons/fi";
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { FaWhatsapp, FaStar } from "react-icons/fa";
@@ -138,8 +140,28 @@ const STATUS_META = {
   concluida:    { label: "Concluída",    cor: "#a5b4fc", bg: "rgba(99,102,241,0.15)",  border: "rgba(99,102,241,0.3)"  },
 };
 
-function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onStatus, atualizandoStatus }) {
+function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onStatus, atualizandoStatus, aba, avaliacoesMotorista, onAvaliarPassageiro, buscarPassageiros }) {
   const [confirmando, setConfirmando] = useState(false);
+  const [passageiros, setPassageiros] = useState(null);
+  const [carregandoPassageiros, setCarregandoPassageiros] = useState(false);
+  const [mostrandoPassageiros, setMostrandoPassageiros] = useState(false);
+
+  async function togglePassageiros() {
+    if (mostrandoPassageiros) { setMostrandoPassageiros(false); return; }
+    if (passageiros === null) {
+      try {
+        setCarregandoPassageiros(true);
+        const lista = await buscarPassageiros(carona.id);
+        setPassageiros(lista);
+      } catch {
+        toast.error("Não foi possível carregar os passageiros.");
+        return;
+      } finally {
+        setCarregandoPassageiros(false);
+      }
+    }
+    setMostrandoPassageiros(true);
+  }
   const lotado = carona.vagas_disponiveis === 0;
   const status = carona.status || "ativa";
   const statusMeta = STATUS_META[status] ?? STATUS_META.ativa;
@@ -252,6 +274,63 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                 <FiCheckSquare size={12} />
                 Concluir carona
               </button>
+            )}
+          </div>
+        )}
+
+        {/* Passageiros */}
+        {carona.vagas - carona.vagas_disponiveis > 0 && (
+          <div className="mb-2">
+            <button
+              onClick={togglePassageiros}
+              disabled={carregandoPassageiros}
+              className="flex items-center justify-between w-full py-2 rounded-xl text-xs font-semibold transition-all"
+              style={{ color: "rgba(255,255,255,0.45)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+            >
+              <span className="flex items-center gap-1.5 px-3">
+                <FiUsers size={12} />
+                Passageiros ({carona.vagas - carona.vagas_disponiveis})
+              </span>
+              <span className="px-3">
+                {carregandoPassageiros
+                  ? <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  : mostrandoPassageiros ? <FiChevronUp size={12} /> : <FiChevronDown size={12} />}
+              </span>
+            </button>
+
+            {mostrandoPassageiros && passageiros !== null && (
+              <div className="mt-2 space-y-1.5">
+                {passageiros.length === 0 ? (
+                  <p className="text-xs text-center py-2" style={{ color: "rgba(255,255,255,0.25)" }}>Nenhum passageiro.</p>
+                ) : passageiros.map(p => (
+                  <div key={p.reserva_id} className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      {p.foto_perfil ? (
+                        <img src={p.foto_perfil} alt="" className="w-7 h-7 rounded-full object-cover shrink-0"
+                          style={{ border: "1px solid rgba(255,255,255,0.15)" }} />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold text-white"
+                          style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)" }}>
+                          {p.nome?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-white truncate">{p.nome?.split(" ")[0]}</p>
+                        {p.telefone && (
+                          <p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.3)" }}>{p.telefone}</p>
+                        )}
+                      </div>
+                    </div>
+                    {aba === "historico" && (
+                      <StarRating
+                        value={avaliacoesMotorista?.[p.reserva_id] || 0}
+                        onChange={nota => onAvaliarPassageiro(p.reserva_id, nota)}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
@@ -525,6 +604,7 @@ function MinhasCaronas() {
   const [atualizandoStatus, setAtualizandoStatus] = useState(null);
   const [aba, setAba] = useState("ativas");
   const [avaliacoes, setAvaliacoes] = useState({});
+  const [avaliacoesMotorista, setAvaliacoesMotorista] = useState({});
 
   const hoje = new Date().toISOString().split("T")[0];
   const getDataItem = (item) => isMotorista ? item.data_saida : item.carona?.data_saida;
@@ -540,10 +620,12 @@ function MinhasCaronas() {
         setCarregando(true);
         const resposta = await api.get(endpoint);
         setItens(resposta.data);
-        // Para passageiros, busca avaliações já dadas
         if (!isMotorista) {
           const { data } = await api.get("/avaliacoes/minhas");
           setAvaliacoes(data);
+        } else {
+          const { data } = await api.get("/avaliacoes/minhas-como-motorista");
+          setAvaliacoesMotorista(data);
         }
       } catch {
         toast.error("Não foi possível carregar os dados. Tente novamente.");
@@ -606,6 +688,21 @@ function MinhasCaronas() {
     } catch (err) {
       toast.error(err.response?.data?.mensagem || "Não foi possível registrar a avaliação.");
     }
+  }
+
+  async function handleAvaliarPassageiro(reservaId, nota) {
+    try {
+      await api.post("/avaliacoes/passageiro", { reserva_id: reservaId, nota });
+      setAvaliacoesMotorista(prev => ({ ...prev, [reservaId]: nota }));
+      toast.success("Passageiro avaliado!");
+    } catch (err) {
+      toast.error(err.response?.data?.mensagem || "Não foi possível registrar a avaliação.");
+    }
+  }
+
+  async function buscarPassageiros(caronaId) {
+    const { data } = await api.get(`/caronas/${caronaId}/passageiros`);
+    return data;
   }
 
   return (
@@ -756,6 +853,9 @@ function MinhasCaronas() {
                     onStatus={handleStatus}
                     atualizandoStatus={atualizandoStatus}
                     aba={aba}
+                    avaliacoesMotorista={avaliacoesMotorista}
+                    onAvaliarPassageiro={handleAvaliarPassageiro}
+                    buscarPassageiros={buscarPassageiros}
                   />
                 </motion.div>
               ))

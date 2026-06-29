@@ -221,4 +221,26 @@ function atualizarStatus(req, res, next) {
   }
 }
 
-module.exports = { listarCaronas, minhasCaronas, criarCarona, excluirCarona, reservarVaga, atualizarStatus };
+/* GET /api/caronas/:id/passageiros — motorista vê quem reservou sua carona */
+function passageirosDaCarona(req, res, next) {
+  try {
+    const caronaId = Number(req.params.id);
+    const carona = db.prepare("SELECT motorista_id FROM caronas WHERE id = ?").get(caronaId);
+    if (!carona) return res.status(404).json({ mensagem: "Carona não encontrada." });
+    if (carona.motorista_id !== req.usuario.id) {
+      return res.status(403).json({ mensagem: "Sem permissão." });
+    }
+    const passageiros = db.prepare(`
+      SELECT r.id AS reserva_id, u.id, u.nome, u.telefone, u.foto_perfil
+      FROM reservas r
+      JOIN usuarios u ON u.id = r.passageiro_id
+      WHERE r.carona_id = ?
+      ORDER BY r.criada_em ASC
+    `).all(caronaId);
+    res.json(passageiros);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listarCaronas, minhasCaronas, criarCarona, excluirCarona, reservarVaga, atualizarStatus, passageirosDaCarona };

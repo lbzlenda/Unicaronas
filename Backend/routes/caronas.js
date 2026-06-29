@@ -7,6 +7,7 @@ const {
   excluirCarona,
   reservarVaga,
   atualizarStatus,
+  passageirosDaCarona,
 } = require("../controllers/caronaController.js");
 
 const router = Router();
@@ -16,6 +17,7 @@ router.get("/minhas",        autenticar, somenteMotorista, minhasCaronas);
 router.post("/",             autenticar, somenteMotorista, criarCarona);
 router.delete("/:id",        autenticar, somenteMotorista, excluirCarona);
 router.post("/:id/reservar", autenticar, somentePassageiro, reservarVaga);
-router.patch("/:id/status",  autenticar, somenteMotorista, atualizarStatus);
+router.patch("/:id/status",       autenticar, somenteMotorista, atualizarStatus);
+router.get("/:id/passageiros",    autenticar, somenteMotorista, passageirosDaCarona);
 
 module.exports = router;
