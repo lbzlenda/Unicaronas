@@ -24,6 +24,8 @@ import {
   FiSearch,
   FiSmile,
   FiZap,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
@@ -210,25 +212,42 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
           ))}
         </div>
 
-        {/* Placa do motorista — clicável */}
-        {carona.motorista_placa && (
-          <Link
-            to={`/motorista/${carona.motorista_id}`}
-            className="flex items-center gap-1.5 mb-3 text-xs group"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-            onClick={e => e.stopPropagation()}
-          >
-            <span className="px-2 py-0.5 rounded font-mono font-bold tracking-widest transition-colors"
+        {/* Motorista: avatar + placa */}
+        <Link
+          to={`/motorista/${carona.motorista_id}`}
+          className="flex items-center gap-1.5 mb-3 text-xs group"
+          style={{ color: "rgba(255,255,255,0.35)" }}
+          onClick={e => e.stopPropagation()}
+        >
+          {carona.motorista_foto ? (
+            <img
+              src={carona.motorista_foto}
+              alt=""
+              className="w-5 h-5 rounded-full object-cover shrink-0"
+              style={{ border: "1px solid rgba(255,255,255,0.15)" }}
+            />
+          ) : (
+            <div
+              className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold text-white"
+              style={{ background: meta.bar }}
+            >
+              {carona.motorista_nome?.charAt(0).toUpperCase()}
+            </div>
+          )}
+          {carona.motorista_placa && (
+            <span
+              className="px-2 py-0.5 rounded font-mono font-bold tracking-widest transition-colors"
               style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.55)" }}
               onMouseEnter={e => { e.currentTarget.style.color = "#a5b4fc"; e.currentTarget.style.borderColor = "rgba(99,102,241,0.4)"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}>
+              onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+            >
               {carona.motorista_placa.toUpperCase()}
             </span>
-            <span className="group-hover:text-white/60 transition-colors">
-              por {carona.motorista_nome?.split(" ")[0]}
-            </span>
-          </Link>
-        )}
+          )}
+          <span className="group-hover:text-white/60 transition-colors">
+            por {carona.motorista_nome?.split(" ")[0]}
+          </span>
+        </Link>
 
         {/* Barra de ocupação */}
         <div className="mb-4">
@@ -712,6 +731,10 @@ export default function Home() {
   const [carregando, setCarregando] = useState(!isMotorista);
   const [reservando, setReservando] = useState(null);
   const [reservados, setReservados] = useState(new Set());
+  const [filtroData, setFiltroData] = useState("");
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [total, setTotal] = useState(0);
   const [userPos, setUserPos] = useState(null);
   const [buscandoGps, setBuscandoGps] = useState(false);
   const [ordenarDistancia, setOrdenarDistancia] = useState(false);
@@ -719,12 +742,20 @@ export default function Home() {
 
   const { pulling, progress } = usePullToRefresh(buscarCaronas);
 
-  async function buscarCaronas() {
+  async function buscarCaronas(opts = {}) {
+    const { novaPagina = pagina, novoDestino = filtroIES, novaData = filtroData } = opts;
     try {
       setCarregando(true);
       setErro(false);
-      const { data } = await api.get("/caronas");
-      setCaronas(data);
+      const params = new URLSearchParams();
+      if (novoDestino) params.set("destino", novoDestino);
+      if (novaData) params.set("data", novaData);
+      params.set("pagina", novaPagina);
+      const { data } = await api.get(`/caronas?${params}`);
+      setCaronas(data.caronas);
+      setTotal(data.total);
+      setTotalPaginas(data.paginas);
+      setPagina(data.pagina);
     } catch {
       setErro(true);
       toast.error("Não foi possível carregar as caronas. Tente novamente.");
@@ -733,8 +764,18 @@ export default function Home() {
     }
   }
 
+  function mudarFiltroIES(val) {
+    setFiltroIES(val);
+    buscarCaronas({ novaPagina: 1, novoDestino: val, novaData: filtroData });
+  }
+
+  function mudarFiltroData(val) {
+    setFiltroData(val);
+    buscarCaronas({ novaPagina: 1, novoDestino: filtroIES, novaData: val });
+  }
+
   useEffect(() => {
-    if (!isMotorista) buscarCaronas();
+    if (!isMotorista) buscarCaronas({ novaPagina: 1 });
   }, [isMotorista]);
 
   async function handleReservar(id) {
@@ -785,7 +826,7 @@ export default function Home() {
     return distanciaKm(userPos.lat, userPos.lng, carona.lat, carona.lng);
   }
 
-  let caronasFiltradas = filtroIES ? caronas.filter((c) => c.destino === filtroIES) : caronas;
+  let caronasFiltradas = caronas;
   if (ordenarDistancia && userPos) {
     caronasFiltradas = [...caronasFiltradas].sort((a, b) => {
       const dA = getDistancia(a) ?? Infinity;
@@ -916,7 +957,7 @@ export default function Home() {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
                   className="flex items-center gap-6">
                   {[
-                    { val: caronas.length,    label: "caronas ativas" },
+                    { val: total,    label: "caronas ativas" },
                     { val: totalVagas,        label: "vagas livres"   },
                     { val: new Set(caronas.map(c => c.destino)).size, label: "destinos" },
                   ].map(({ val, label }, i) => (
@@ -954,7 +995,7 @@ export default function Home() {
             <div className="max-w-5xl mx-auto px-4 py-3">
               <div className="flex gap-2 overflow-x-auto no-scrollbar">
                 <button
-                  onClick={() => setFiltroIES("")}
+                  onClick={() => mudarFiltroIES("")}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shrink-0 transition-all"
                   style={
                     filtroIES === ""
@@ -988,7 +1029,7 @@ export default function Home() {
                   return (
                     <button
                       key={uni}
-                      onClick={() => setFiltroIES(uni)}
+                      onClick={() => mudarFiltroIES(uni)}
                       className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shrink-0 transition-all"
                       style={
                         ativo
@@ -1005,6 +1046,30 @@ export default function Home() {
                   );
                 })}
               </div>
+            </div>
+          </div>
+
+          {/* Filtro por data */}
+          <div className="max-w-5xl mx-auto px-4 pb-2">
+            <div className="flex items-center gap-2"
+              style={{ color: "rgba(255,255,255,0.35)" }}>
+              <FiCalendar size={13} className="shrink-0" />
+              <input
+                type="date"
+                value={filtroData}
+                onChange={e => mudarFiltroData(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+                className="bg-transparent text-sm font-medium outline-none"
+                style={{ color: filtroData ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)", colorScheme: "dark" }}
+              />
+              {filtroData && (
+                <button
+                  onClick={() => mudarFiltroData("")}
+                  className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition ml-1"
+                >
+                  Limpar
+                </button>
+              )}
             </div>
           </div>
 
@@ -1035,9 +1100,10 @@ export default function Home() {
               {!carregando && (
                 <p className="text-sm text-white/40">
                   {filtroIES ? `Destino: ${filtroIES}` : "Todas as instituições"}
+                  {filtroData && ` · ${new Date(filtroData + "T00:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}`}
                   {" · "}
                   <span className="font-medium text-white/60">
-                    {caronasFiltradas.length} resultado{caronasFiltradas.length !== 1 ? "s" : ""}
+                    {total} resultado{total !== 1 ? "s" : ""}
                   </span>
                 </p>
               )}
@@ -1064,7 +1130,7 @@ export default function Home() {
                   </div>
                 )
                 : caronasFiltradas.length === 0
-                ? <EmptyState filtroIES={filtroIES} onClearFilter={() => setFiltroIES("")} />
+                ? <EmptyState filtroIES={filtroIES} onClearFilter={() => mudarFiltroIES("")} />
                 : caronasFiltradas.map((carona) => (
                     <CardCarona
                       key={carona.id}
@@ -1076,6 +1142,31 @@ export default function Home() {
                     />
                   ))}
             </div>
+
+            {/* Paginação */}
+            {totalPaginas > 1 && (
+              <div className="flex items-center justify-center gap-3 mt-8">
+                <button
+                  onClick={() => buscarCaronas({ novaPagina: pagina - 1 })}
+                  disabled={pagina === 1}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-30"
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)" }}
+                >
+                  <FiChevronLeft size={16} />
+                </button>
+                <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  {pagina} <span style={{ color: "rgba(255,255,255,0.25)" }}>de</span> {totalPaginas}
+                </span>
+                <button
+                  onClick={() => buscarCaronas({ novaPagina: pagina + 1 })}
+                  disabled={pagina === totalPaginas}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-30"
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)" }}
+                >
+                  <FiChevronRight size={16} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Seção "Como funciona" */}

@@ -1,10 +1,14 @@
 const db = require("../database/db.js");
 const { caronaSchema } = require("../validators/caronaValidator.js");
 
-/* GET /api/caronas — feed público, filtro opcional por ?destino= */
+const POR_PAGINA = 12;
+
+/* GET /api/caronas — feed público, com paginação, filtro por ?destino=, ?data=, ?pagina= */
 function listarCaronas(req, res, next) {
   try {
-    const { destino, motorista_id } = req.query;
+    const { destino, motorista_id, data, pagina } = req.query;
+    const paginaNum = Math.max(1, parseInt(pagina) || 1);
+    const offset = (paginaNum - 1) * POR_PAGINA;
 
     const conditions = [
       "(c.data_saida IS NULL OR c.data_saida >= date('now', 'localtime'))",
@@ -13,17 +17,22 @@ function listarCaronas(req, res, next) {
     const params = [];
     if (destino) { conditions.push("c.destino = ?"); params.push(destino); }
     if (motorista_id) { conditions.push("c.motorista_id = ?"); params.push(Number(motorista_id)); }
+    if (data) { conditions.push("c.data_saida = ?"); params.push(data); }
+
+    const where = `WHERE ${conditions.join(" AND ")}`;
+    const { total } = db.prepare(`SELECT COUNT(*) AS total FROM caronas c ${where}`).get(...params);
 
     const sql = `
-      SELECT c.*, u.nome AS motorista_nome, u.telefone AS motorista_telefone, u.placa AS motorista_placa
+      SELECT c.*, u.nome AS motorista_nome, u.telefone AS motorista_telefone, u.placa AS motorista_placa, u.foto_perfil AS motorista_foto
       FROM caronas c
       JOIN usuarios u ON u.id = c.motorista_id
-      WHERE ${conditions.join(" AND ")}
+      ${where}
       ORDER BY c.data_saida ASC, c.horario_saida ASC
+      LIMIT ? OFFSET ?
     `;
 
-    const caronas = db.prepare(sql).all(...params);
-    res.json(caronas);
+    const caronas = db.prepare(sql).all(...params, POR_PAGINA, offset);
+    res.json({ caronas, total, paginas: Math.ceil(total / POR_PAGINA), pagina: paginaNum });
   } catch (err) {
     next(err);
   }
@@ -184,6 +193,28 @@ function atualizarStatus(req, res, next) {
     }
 
     db.prepare("UPDATE caronas SET status = ? WHERE id = ?").run(status, Number(req.params.id));
+
+    // Notifica os passageiros sobre a mudança de status
+    try {
+      const mensagens = {
+        em_andamento: `Sua carona ${carona.origem} → ${carona.destino} está a caminho!`,
+        concluida: `Sua carona ${carona.origem} → ${carona.destino} foi concluída.`,
+        ativa: `Sua carona ${carona.origem} → ${carona.destino} foi reativada.`,
+      };
+      const mensagem = mensagens[status];
+      if (mensagem) {
+        const passageiros = db
+          .prepare("SELECT passageiro_id FROM reservas WHERE carona_id = ?")
+          .all(Number(req.params.id));
+        const insertNotif = db.prepare(
+          "INSERT INTO notificacoes (usuario_id, tipo, mensagem) VALUES (?, ?, ?)"
+        );
+        for (const { passageiro_id } of passageiros) {
+          insertNotif.run(passageiro_id, "status_carona", mensagem);
+        }
+      }
+    } catch {}
+
     res.json({ mensagem: "Status atualizado.", status });
   } catch (err) {
     next(err);

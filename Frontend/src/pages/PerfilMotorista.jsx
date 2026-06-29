@@ -134,7 +134,7 @@ export default function PerfilMotorista() {
           api.get(`/caronas?motorista_id=${id}`),
         ]);
         setMotorista(perfil);
-        setCaronas(rides);
+        setCaronas(rides.caronas);
       } catch {
         setErro(true);
         toast.error("Motorista não encontrado.");
