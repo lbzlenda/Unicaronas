@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+html, body {
+  scroll-behavior: smooth;
+  background: #020817;
+  color-scheme: dark;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.4); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.7); }
+
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+.card-enter {
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+.card-enter:nth-child(1) { animation-delay:   0ms; }
+.card-enter:nth-child(2) { animation-delay:  70ms; }
+.card-enter:nth-child(3) { animation-delay: 140ms; }
+.card-enter:nth-child(4) { animation-delay: 210ms; }
+.card-enter:nth-child(5) { animation-delay: 280ms; }
+.card-enter:nth-child(6) { animation-delay: 350ms; }
+.card-enter:nth-child(7) { animation-delay: 420ms; }
+.card-enter:nth-child(8) { animation-delay: 490ms; }
+
+/* Correções para Leaflet com Tailwind v4 */
+.leaflet-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
+.leaflet-container {
+  font-family: inherit;
+}
+.leaflet-control-zoom a {
+  color: #1e1b4b !important;
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
