@@ -31,18 +31,16 @@ const pinIcon = L.divIcon({
   iconAnchor: [11, 11],
 });
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)",
 };
 
 const INPUT_STYLE = {
-  background: "rgba(255,255,255,0.07)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  color: "#fff",
+  background: "#F8FAFC",
+  border: "1px solid #E2E8F0",
+  color: "#0F172A",
 };
 
 // Centro de Palmas, TO
@@ -57,30 +55,19 @@ function Spinner() {
   );
 }
 
-function Blob({ className, style, animate }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      style={style}
-      animate={animate}
-      transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-    />
-  );
-}
-
 function Campo({ label, icone, erro, children, hint }) {
   return (
     <div>
       <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mb-1.5"
-        style={{ color: "rgba(255,255,255,0.5)" }}>
+        style={{ color: "#64748B" }}>
         {icone}{label}
       </label>
       {children}
       {hint && !erro && (
-        <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>{hint}</p>
+        <p className="text-xs mt-1" style={{ color: "#94A3B8" }}>{hint}</p>
       )}
       {erro && (
-        <p className="text-red-300 text-xs mt-1 flex items-center gap-1">
+        <p className="text-xs mt-1 flex items-center gap-1" style={{ color: "#EF4444" }}>
           <FiAlertCircle className="shrink-0" />{erro}
         </p>
       )}
@@ -88,7 +75,7 @@ function Campo({ label, icone, erro, children, hint }) {
   );
 }
 
-function GlassInput({ type = "text", placeholder, disabled, step, min, max, registration }) {
+function LightInput({ type = "text", placeholder, disabled, step, min, max, registration }) {
   return (
     <input
       type={type}
@@ -98,10 +85,10 @@ function GlassInput({ type = "text", placeholder, disabled, step, min, max, regi
       min={min}
       max={max}
       {...registration}
-      className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/25 focus:outline-none transition disabled:opacity-50"
-      style={INPUT_STYLE}
-      onFocus={e => e.target.style.borderColor = "rgba(99,102,241,0.7)"}
-      onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+      className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none transition disabled:opacity-50"
+      style={{ ...INPUT_STYLE, "::placeholder": { color: "#94A3B8" } }}
+      onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+      onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
     />
   );
 }
@@ -119,11 +106,11 @@ function MapClickHandler({ onClique }) {
 function MapaPicker({ lat, lng, onChange }) {
   const center = lat && lng ? [lat, lng] : PALMAS;
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(99,102,241,0.3)", boxShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(99,102,241,0.3)", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
       <MapContainer
         center={center}
         zoom={13}
-        style={{ height: 220, width: "100%", background: "#1e1b4b" }}
+        style={{ height: 220, width: "100%", background: "#EEF2FF" }}
         zoomControl={true}
       >
         <TileLayer
@@ -196,19 +183,18 @@ function OferecerCarona() {
 
   if (usuario?.tipo !== "motorista") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4"
-        style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-        <div className="rounded-2xl p-8 max-w-sm text-center w-full" style={GLASS}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "#F4F7FB" }}>
+        <div className="rounded-2xl p-8 max-w-sm text-center w-full" style={CARD}>
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            style={{ background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)" }}>
+            style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)" }}>
             <FiAlertCircle className="text-amber-400 text-3xl" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Acesso restrito</h2>
-          <p className="text-white/40 text-sm mb-4">
+          <h2 className="text-lg font-bold mb-2" style={{ color: "#0F172A" }}>Acesso restrito</h2>
+          <p className="text-sm mb-4" style={{ color: "#64748B" }}>
             Apenas motoristas podem oferecer caronas.
           </p>
           <button onClick={() => navigate("/")}
-            className="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">
+            className="text-indigo-500 text-sm font-medium hover:text-indigo-600 transition">
             Voltar para a Home
           </button>
         </div>
@@ -234,22 +220,21 @@ function OferecerCarona() {
 
   if (sucesso) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4"
-        style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "#F4F7FB" }}>
         <motion.div
           initial={{ scale: 0.85, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="rounded-2xl p-8 max-w-sm text-center w-full"
-          style={GLASS}
+          style={CARD}
         >
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)" }}>
-            <FiCheckCircle className="text-emerald-400 text-3xl" />
+            style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.3)" }}>
+            <FiCheckCircle className="text-emerald-500 text-3xl" />
           </div>
-          <h2 className="text-xl font-bold text-white mb-2">
+          <h2 className="text-xl font-bold mb-2" style={{ color: "#0F172A" }}>
             {semanasCount > 1 ? `${semanasCount} caronas cadastradas!` : "Carona cadastrada!"}
           </h2>
-          <p className="text-white/40 text-sm mb-6">
+          <p className="text-sm mb-6" style={{ color: "#64748B" }}>
             {semanasCount > 1
               ? `Criamos ${semanasCount} caronas semanais a partir da data escolhida.`
               : "Sua carona já está visível para os passageiros na página inicial."}
@@ -263,7 +248,7 @@ function OferecerCarona() {
               Oferecer outra carona
             </button>
             <button onClick={() => navigate("/minhas-caronas")}
-              className="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">
+              className="text-indigo-500 text-sm font-medium hover:text-indigo-600 transition">
               Ver minhas caronas
             </button>
           </div>
@@ -273,31 +258,19 @@ function OferecerCarona() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-
-      <Blob
-        className="w-[500px] h-[500px] -top-32 -left-32 opacity-20"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 40, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
-      />
-      <Blob
-        className="w-80 h-80 -bottom-20 -right-16 opacity-15"
-        style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }}
-        animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
-      />
+    <div className="min-h-screen relative overflow-x-hidden" style={{ background: "#F4F7FB" }}>
 
       {/* Hero */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.3)" }}>
-            <MdOutlineDirectionsCar className="text-indigo-400 text-3xl" />
+            style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.2)" }}>
+            <MdOutlineDirectionsCar style={{ color: "#6366f1", fontSize: "1.875rem" }} />
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-extrabold mb-2" style={{ color: "#0F172A" }}>
             {republicar ? "Republicar Carona" : "Oferecer Carona"}
           </h1>
-          <p className="text-sm max-w-xs mx-auto" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <p className="text-sm max-w-xs mx-auto" style={{ color: "#64748B" }}>
             {republicar
               ? "Dados pré-preenchidos. Ajuste o que precisar e publique."
               : "Preencha os dados da sua carona. Passageiros poderão reservar vagas em instantes."}
@@ -312,13 +285,13 @@ function OferecerCarona() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
           className="rounded-2xl p-6 md:p-8"
-          style={GLASS}
+          style={CARD}
         >
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Campo label="Data de saída" icone={<FiCalendar className="text-indigo-400" />} erro={errors.data_saida?.message}>
-                <GlassInput
+                <LightInput
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
                   disabled={isSubmitting}
@@ -326,7 +299,7 @@ function OferecerCarona() {
                 />
               </Campo>
               <Campo label="Horário de saída" icone={<FiClock className="text-indigo-400" />} erro={errors.horario_saida?.message}>
-                <GlassInput
+                <LightInput
                   type="time"
                   disabled={isSubmitting}
                   registration={register("horario_saida")}
@@ -335,7 +308,7 @@ function OferecerCarona() {
             </div>
 
             <Campo label="Origem (endereço/bairro)" icone={<FiMapPin className="text-indigo-400" />} erro={errors.origem?.message}>
-              <GlassInput
+              <LightInput
                 placeholder="Ex: Setor Buritís, Quadra 103"
                 disabled={isSubmitting}
                 registration={register("origem")}
@@ -348,12 +321,12 @@ function OferecerCarona() {
                 disabled={isSubmitting}
                 className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none transition disabled:opacity-50"
                 style={INPUT_STYLE}
-                onFocus={e => e.target.style.borderColor = "rgba(99,102,241,0.7)"}
-                onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+                onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
               >
-                <option value="" style={{ background: "#0f172a" }}>Selecione a instituição</option>
+                <option value="" style={{ background: "#FFFFFF", color: "#0F172A" }}>Selecione a instituição</option>
                 {DESTINOS.map((d) => (
-                  <option key={d} value={d} style={{ background: "#0f172a" }}>{d}</option>
+                  <option key={d} value={d} style={{ background: "#FFFFFF", color: "#0F172A" }}>{d}</option>
                 ))}
               </select>
             </Campo>
@@ -370,7 +343,7 @@ function OferecerCarona() {
                   onClick={usarMinhaLocalizacao}
                   disabled={buscandoGps}
                   className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all disabled:opacity-50"
-                  style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)" }}
+                  style={{ background: "#EEF2FF", color: "#4F46E5", border: "1px solid rgba(99,102,241,0.25)" }}
                 >
                   {buscandoGps ? <Spinner /> : <FiNavigation size={12} />}
                   {buscandoGps ? "Obtendo localização..." : "Usar minha localização atual"}
@@ -381,7 +354,7 @@ function OferecerCarona() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Campo label="Valor (R$)" icone={<FiDollarSign className="text-indigo-400" />} erro={errors.valor?.message}>
-                <GlassInput
+                <LightInput
                   type="number"
                   step="0.50"
                   placeholder="4,00 – 10,00"
@@ -391,7 +364,7 @@ function OferecerCarona() {
               </Campo>
 
               <Campo label="Vagas (máx. 4)" icone={<FiUsers className="text-indigo-400" />} erro={errors.vagas?.message}>
-                <GlassInput
+                <LightInput
                   type="number"
                   min="1"
                   max="4"
@@ -404,15 +377,15 @@ function OferecerCarona() {
             {/* Repetição semanal */}
             <div
               className="rounded-xl p-4"
-              style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}
+              style={{ background: "#F0F4FF", border: "1px solid rgba(99,102,241,0.2)" }}
             >
               <label className="flex items-center gap-3 cursor-pointer select-none">
                 <div
                   onClick={() => setRecorrente(r => !r)}
                   className="w-10 h-5.5 rounded-full relative transition-all cursor-pointer shrink-0"
                   style={{
-                    background: recorrente ? "linear-gradient(135deg,#6366f1,#3b82f6)" : "rgba(255,255,255,0.1)",
-                    border: recorrente ? "none" : "1px solid rgba(255,255,255,0.15)",
+                    background: recorrente ? "linear-gradient(135deg,#6366f1,#3b82f6)" : "#E2E8F0",
+                    border: recorrente ? "none" : "1px solid #CBD5E1",
                     padding: "2px",
                     width: "40px",
                     height: "22px",
@@ -428,28 +401,28 @@ function OferecerCarona() {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white/80">Repetir semanalmente</p>
-                  <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  <p className="text-sm font-semibold" style={{ color: "#0F172A" }}>Repetir semanalmente</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>
                     Cria cópias desta carona automaticamente para as próximas semanas
                   </p>
                 </div>
               </label>
               {recorrente && (
                 <div className="mt-3 flex items-center gap-3">
-                  <span className="text-sm text-white/60">Repetir por</span>
+                  <span className="text-sm" style={{ color: "#64748B" }}>Repetir por</span>
                   <select
                     value={semanas}
                     onChange={e => setSemanas(Number(e.target.value))}
-                    className="rounded-lg px-3 py-1.5 text-sm font-semibold text-white focus:outline-none"
-                    style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.4)" }}
+                    className="rounded-lg px-3 py-1.5 text-sm font-semibold focus:outline-none"
+                    style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.3)", color: "#4F46E5" }}
                   >
                     {[2, 3, 4, 5, 6, 7, 8].map(n => (
-                      <option key={n} value={n} style={{ background: "#0f172a" }}>
+                      <option key={n} value={n} style={{ background: "#FFFFFF", color: "#0F172A" }}>
                         {n} semanas
                       </option>
                     ))}
                   </select>
-                  <span className="text-xs text-white/30">= {semanas} caronas no total</span>
+                  <span className="text-xs" style={{ color: "#94A3B8" }}>= {semanas} caronas no total</span>
                 </div>
               )}
             </div>

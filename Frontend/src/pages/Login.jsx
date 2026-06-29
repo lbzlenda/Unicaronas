@@ -41,11 +41,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-start justify-center px-4 pt-8" style={{
-      background: `
-        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(99,102,241,0.35) 0%, transparent 100%),
-        radial-gradient(ellipse 50% 40% at 100% 100%, rgba(59,130,246,0.15) 0%, transparent 100%),
-        #030712
-      `
+      background: `radial-gradient(ellipse 80% 50% at 50% -5%, rgba(99,102,241,0.08) 0%, transparent 100%), #F4F7FB`
     }}>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -55,51 +51,47 @@ export default function Login() {
       >
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full blur-2xl opacity-60"
-              style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)", transform: "scale(1.8)" }} />
-            <img src={logo} alt="UniCaronas" className="relative w-62 h-62 object-contain" />
-          </div>
+          <img src={logo} alt="UniCaronas" className="w-62 h-62 object-contain" />
         </div>
 
         {/* Card */}
         <div style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "#FFFFFF",
+          border: "1px solid #E2E8F0",
           borderRadius: "20px",
-          boxShadow: "0 0 0 1px rgba(255,255,255,0.03), 0 24px 64px rgba(0,0,0,0.6)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)",
         }} className="p-8">
-          <h1 className="text-2xl font-extrabold text-white mb-1">Bem-vindo de volta</h1>
-          <p className="text-white/35 text-sm mb-7">Entre na sua conta para continuar</p>
+          <h1 className="text-2xl font-extrabold mb-1" style={{ color: "#0F172A" }}>Bem-vindo de volta</h1>
+          <p className="text-sm mb-7" style={{ color: "#64748B" }}>Entre na sua conta para continuar</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="text-xs font-semibold text-white/40 uppercase tracking-widest block mb-2">E-mail</label>
+              <label className="text-xs font-semibold uppercase tracking-widest block mb-2" style={{ color: "#64748B" }}>E-mail</label>
               <input type="email" placeholder="seu@email.com"
                 disabled={isSubmitting} {...register("email")}
-                className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-white/20 focus:outline-none transition-all disabled:opacity-50"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
-                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.8)"; e.target.style.background = "rgba(255,255,255,0.09)"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.background = "rgba(255,255,255,0.06)"; }}
+                className="w-full px-4 py-3.5 rounded-xl text-sm focus:outline-none transition-all disabled:opacity-50"
+                style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", color: "#0F172A" }}
+                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+                onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
               />
               {errors.email && (
-                <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
+                <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#EF4444" }}>
                   <FiAlertCircle size={11} />{errors.email.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-white/40 uppercase tracking-widest block mb-2">Senha</label>
+              <label className="text-xs font-semibold uppercase tracking-widest block mb-2" style={{ color: "#64748B" }}>Senha</label>
               <input type="password" placeholder="••••••••"
                 disabled={isSubmitting} {...register("senha")}
-                className="w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-white/20 focus:outline-none transition-all disabled:opacity-50"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
-                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.8)"; e.target.style.background = "rgba(255,255,255,0.09)"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.background = "rgba(255,255,255,0.06)"; }}
+                className="w-full px-4 py-3.5 rounded-xl text-sm focus:outline-none transition-all disabled:opacity-50"
+                style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", color: "#0F172A" }}
+                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+                onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
               />
               {errors.senha && (
-                <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
+                <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#EF4444" }}>
                   <FiAlertCircle size={11} />{errors.senha.message}
                 </p>
               )}
@@ -117,18 +109,22 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-white/30 text-sm mt-6">
+        <p className="text-center text-sm mt-6" style={{ color: "#64748B" }}>
           Não tem conta?{" "}
-          <Link to="/cadastro" className="text-indigo-400 font-semibold hover:text-indigo-300 transition">
+          <Link to="/cadastro" className="font-semibold transition" style={{ color: "#6366f1" }}
+            onMouseEnter={e => { e.target.style.color = "#4f46e5"; }}
+            onMouseLeave={e => { e.target.style.color = "#6366f1"; }}>
             Cadastre-se grátis
           </Link>
         </p>
-        <p className="text-center text-white/20 text-sm mt-3">
-          <Link to="/esqueci-senha" className="hover:text-white/40 transition">
+        <p className="text-center text-sm mt-3">
+          <Link to="/esqueci-senha" className="transition" style={{ color: "#94A3B8" }}
+            onMouseEnter={e => { e.target.style.color = "#6366f1"; }}
+            onMouseLeave={e => { e.target.style.color = "#94A3B8"; }}>
             Esqueceu sua senha?
           </Link>
         </p>
-        <p className="text-center text-white/20 text-xs mt-4">
+        <p className="text-center text-xs mt-4" style={{ color: "#94A3B8" }}>
           CEULP · UFT · UniCatólica · Afya · IFTO · ITOP
         </p>
       </motion.div>

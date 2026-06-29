@@ -11,30 +11,17 @@ import {
   FiBookmark, FiInfo, FiSettings,
 } from "react-icons/fi";
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
 };
 
 const INPUT_STYLE = {
-  background: "rgba(255,255,255,0.07)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  color: "#fff",
+  background: "#F8FAFC",
+  border: "1px solid #E2E8F0",
+  color: "#0F172A",
 };
-
-function Blob({ className, style, animate }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      style={style}
-      animate={animate}
-      transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-    />
-  );
-}
 
 function Spinner() {
   return (
@@ -53,20 +40,19 @@ function SectionCard({ title, icon, children, delay = 0, danger = false }) {
       transition={{ duration: 0.4, delay }}
       className="rounded-2xl overflow-hidden"
       style={danger ? {
-        ...GLASS,
-        background: "rgba(239,68,68,0.06)",
+        background: "#FFFFFF",
         border: "1px solid rgba(239,68,68,0.2)",
-        boxShadow: "0 8px 32px rgba(239,68,68,0.1)",
-      } : GLASS}
+        boxShadow: "0 2px 8px rgba(239,68,68,0.06)",
+      } : CARD}
     >
       <div
         className="px-6 py-4 flex items-center gap-2"
-        style={{ borderBottom: `1px solid ${danger ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.07)"}` }}
+        style={{ borderBottom: `1px solid ${danger ? "rgba(239,68,68,0.15)" : "#E9EEF4"}` }}
       >
-        <span style={{ color: danger ? "#fca5a5" : "rgba(99,102,241,0.9)" }}>{icon}</span>
+        <span style={{ color: danger ? "#dc2626" : "#6366f1" }}>{icon}</span>
         <h2
           className="text-xs font-bold uppercase tracking-widest"
-          style={{ color: danger ? "#fca5a5" : "rgba(255,255,255,0.55)" }}
+          style={{ color: danger ? "#dc2626" : "#64748B" }}
         >
           {title}
         </h2>
@@ -81,7 +67,7 @@ function PasswordInput({ label, value, onChange, show, onToggle, placeholder = "
     <div>
       <label
         className="block text-xs font-semibold uppercase tracking-widest mb-1.5"
-        style={{ color: "rgba(255,255,255,0.4)" }}
+        style={{ color: "#64748B" }}
       >
         {label}
       </label>
@@ -92,18 +78,18 @@ function PasswordInput({ label, value, onChange, show, onToggle, placeholder = "
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full rounded-xl px-3 py-2.5 text-sm pr-10 placeholder-white/25 focus:outline-none transition disabled:opacity-50"
+          className="w-full rounded-xl px-3 py-2.5 text-sm pr-10 focus:outline-none transition disabled:opacity-50"
           style={INPUT_STYLE}
-          onFocus={e => e.target.style.borderColor = "rgba(99,102,241,0.7)"}
-          onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+          onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+          onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
         />
         <button
           type="button"
           onClick={onToggle}
           className="absolute right-3 top-1/2 -translate-y-1/2 transition"
-          style={{ color: "rgba(255,255,255,0.3)" }}
-          onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
-          onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.3)"}
+          style={{ color: "#94A3B8" }}
+          onMouseEnter={e => e.currentTarget.style.color = "#64748B"}
+          onMouseLeave={e => e.currentTarget.style.color = "#94A3B8"}
         >
           {show ? <FiEyeOff size={15} /> : <FiEye size={15} />}
         </button>
@@ -193,19 +179,8 @@ export default function Configuracoes() {
   return (
     <div
       className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}
+      style={{ background: "#F4F7FB" }}
     >
-      <Blob
-        className="w-[500px] h-[500px] -top-32 -left-32 opacity-20"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 40, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
-      />
-      <Blob
-        className="w-80 h-80 -bottom-20 -right-16 opacity-15"
-        style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }}
-        animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
-      />
-
       <div className="relative z-10 max-w-2xl mx-auto px-4 pt-8 pb-16">
 
         {/* Cabeçalho */}
@@ -218,9 +193,9 @@ export default function Configuracoes() {
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-1.5 text-sm font-medium mb-6 transition"
-            style={{ color: "rgba(255,255,255,0.5)" }}
-            onMouseEnter={e => e.currentTarget.style.color = "#fff"}
-            onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
+            style={{ color: "#94A3B8" }}
+            onMouseEnter={e => e.currentTarget.style.color = "#0F172A"}
+            onMouseLeave={e => e.currentTarget.style.color = "#94A3B8"}
           >
             <FiArrowLeft />Voltar
           </button>
@@ -228,13 +203,13 @@ export default function Configuracoes() {
           <div className="flex items-center gap-3">
             <div
               className="w-11 h-11 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.3)" }}
+              style={{ background: "#EEF2FF" }}
             >
-              <FiSettings className="text-indigo-400 text-lg" />
+              <FiSettings className="text-indigo-500 text-lg" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold text-white">Configurações</h1>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <h1 className="text-2xl font-extrabold" style={{ color: "#0F172A" }}>Configurações</h1>
+              <p className="text-sm" style={{ color: "#64748B" }}>
                 Gerencie sua conta e preferências
               </p>
             </div>
@@ -275,7 +250,7 @@ export default function Configuracoes() {
                 type="submit"
                 disabled={salvandoSenha || !senhaForm.atual || !senhaForm.nova || !senhaForm.confirmar}
                 className="w-full py-2.5 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)", boxShadow: "0 4px 16px rgba(99,102,241,0.4)" }}
+                style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)", boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}
               >
                 {salvandoSenha ? <><Spinner />Salvando…</> : "Alterar senha"}
               </button>
@@ -287,11 +262,11 @@ export default function Configuracoes() {
             <div>
               <label
                 className="block text-xs font-semibold uppercase tracking-widest mb-1"
-                style={{ color: "rgba(255,255,255,0.4)" }}
+                style={{ color: "#64748B" }}
               >
                 Faculdade padrão
               </label>
-              <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>
+              <p className="text-xs mb-3" style={{ color: "#94A3B8" }}>
                 O filtro da Home já começa selecionado nesta instituição.
               </p>
               <select
@@ -299,12 +274,12 @@ export default function Configuracoes() {
                 onChange={e => handleFacPadrao(e.target.value)}
                 className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none transition"
                 style={INPUT_STYLE}
-                onFocus={e => e.target.style.borderColor = "rgba(99,102,241,0.7)"}
-                onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+                onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
               >
-                <option value="" style={{ background: "#0f172a" }}>Nenhuma (mostrar todas)</option>
+                <option value="">Nenhuma (mostrar todas)</option>
                 {DESTINOS.map(d => (
-                  <option key={d} value={d} style={{ background: "#0f172a" }}>{d}</option>
+                  <option key={d} value={d}>{d}</option>
                 ))}
               </select>
             </div>
@@ -321,8 +296,8 @@ export default function Configuracoes() {
                 { label: "Tipo", valor: usuario.tipo === "motorista" ? "Motorista" : "Passageiro" },
               ].map(({ label, valor }) => (
                 <div key={label} className="flex items-center justify-between text-sm">
-                  <span style={{ color: "rgba(255,255,255,0.4)" }}>{label}</span>
-                  <span className="font-semibold" style={{ color: "rgba(255,255,255,0.75)" }}>{valor}</span>
+                  <span style={{ color: "#64748B" }}>{label}</span>
+                  <span className="font-semibold" style={{ color: "#0F172A" }}>{valor}</span>
                 </div>
               ))}
             </div>
@@ -332,15 +307,15 @@ export default function Configuracoes() {
           <SectionCard title="Zona de perigo" icon={<FiTrash2 size={14} />} delay={0.2} danger>
             {etapaDeletar === 0 ? (
               <div>
-                <p className="text-sm mb-4 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
-                  Excluir a conta é <strong className="text-white">permanente e irreversível</strong>. Todas as suas caronas, reservas e dados serão apagados imediatamente.
+                <p className="text-sm mb-4 leading-relaxed" style={{ color: "#64748B" }}>
+                  Excluir a conta é <strong style={{ color: "#0F172A" }}>permanente e irreversível</strong>. Todas as suas caronas, reservas e dados serão apagados imediatamente.
                 </p>
                 <button
                   onClick={() => setEtapaDeletar(1)}
                   className="flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl transition-all active:scale-95"
-                  style={{ color: "#fca5a5", background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.22)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "rgba(239,68,68,0.12)"}
+                  style={{ color: "#dc2626", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.14)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
                 >
                   <FiTrash2 />
                   Quero excluir minha conta
@@ -354,7 +329,7 @@ export default function Configuracoes() {
               >
                 <div
                   className="rounded-xl p-3 text-sm leading-relaxed"
-                  style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#fca5a5" }}
+                  style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.15)", color: "#dc2626" }}
                 >
                   ⚠️ Você tem certeza? Esta ação <strong>não pode ser desfeita</strong>.
                 </div>
@@ -362,7 +337,7 @@ export default function Configuracoes() {
                 <div>
                   <label
                     className="block text-xs font-semibold uppercase tracking-widest mb-1.5"
-                    style={{ color: "rgba(255,100,100,0.7)" }}
+                    style={{ color: "#dc2626" }}
                   >
                     Confirme com sua senha
                   </label>
@@ -372,16 +347,16 @@ export default function Configuracoes() {
                       value={senhaDeletar}
                       onChange={e => setSenhaDeletar(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full rounded-xl px-3 py-2.5 text-sm pr-10 placeholder-white/25 focus:outline-none transition"
-                      style={{ ...INPUT_STYLE, borderColor: "rgba(239,68,68,0.35)" }}
-                      onFocus={e => e.target.style.borderColor = "rgba(239,68,68,0.7)"}
-                      onBlur={e => e.target.style.borderColor = "rgba(239,68,68,0.35)"}
+                      className="w-full rounded-xl px-3 py-2.5 text-sm pr-10 focus:outline-none transition"
+                      style={{ ...INPUT_STYLE, borderColor: "rgba(239,68,68,0.3)" }}
+                      onFocus={e => { e.target.style.borderColor = "rgba(239,68,68,0.6)"; e.target.style.background = "#FFFFFF"; }}
+                      onBlur={e => { e.target.style.borderColor = "rgba(239,68,68,0.3)"; e.target.style.background = "#F8FAFC"; }}
                     />
                     <button
                       type="button"
                       onClick={() => setMostrarSenhaDeletar(v => !v)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 transition"
-                      style={{ color: "rgba(255,255,255,0.3)" }}
+                      style={{ color: "#94A3B8" }}
                     >
                       {mostrarSenhaDeletar ? <FiEyeOff size={15} /> : <FiEye size={15} />}
                     </button>
@@ -392,7 +367,7 @@ export default function Configuracoes() {
                   <button
                     onClick={() => { setEtapaDeletar(0); setSenhaDeletar(""); }}
                     className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95"
-                    style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(255,255,255,0.1)" }}
+                    style={{ background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }}
                   >
                     Cancelar
                   </button>
@@ -400,7 +375,7 @@ export default function Configuracoes() {
                     onClick={handleDeletarConta}
                     disabled={deletando || !senhaDeletar}
                     className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ background: "rgba(239,68,68,0.22)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.4)" }}
+                    style={{ background: "rgba(239,68,68,0.12)", color: "#dc2626", border: "1px solid rgba(239,68,68,0.3)" }}
                   >
                     {deletando ? <><Spinner />Excluindo…</> : <><FiTrash2 size={14} />Excluir conta</>}
                   </button>

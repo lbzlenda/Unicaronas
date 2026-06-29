@@ -8,12 +8,10 @@ import { FiArrowLeft, FiStar, FiUsers, FiCalendar, FiClock, FiDollarSign, FiArro
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { formatarMoeda } from "../utils/formatar.js";
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
 };
 
 const GRADIENTES = [
@@ -30,20 +28,9 @@ function getGradiente(nome) {
   return GRADIENTES[idx];
 }
 
-function Blob({ className, style, animate }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      style={style}
-      animate={animate}
-      transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-    />
-  );
-}
-
 function StarDisplay({ media, total }) {
   if (!media) return (
-    <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>Sem avaliações ainda</span>
+    <span className="text-sm" style={{ color: "#94A3B8" }}>Sem avaliações ainda</span>
   );
   return (
     <div className="flex items-center gap-2">
@@ -54,13 +41,13 @@ function StarDisplay({ media, total }) {
             size={16}
             style={{
               fill: i <= Math.round(media) ? "#fbbf24" : "transparent",
-              color: i <= Math.round(media) ? "#fbbf24" : "rgba(255,255,255,0.15)",
+              color: i <= Math.round(media) ? "#fbbf24" : "#E2E8F0",
             }}
           />
         ))}
       </div>
-      <span className="text-sm font-bold text-white">{media}</span>
-      <span className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+      <span className="text-sm font-bold" style={{ color: "#0F172A" }}>{media}</span>
+      <span className="text-xs" style={{ color: "#64748B" }}>
         ({total} avaliação{total !== 1 ? "ões" : ""})
       </span>
     </div>
@@ -83,13 +70,13 @@ function CardCaronaMini({ carona }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl p-4"
-      style={GLASS}
+      style={CARD}
     >
-      <p className="text-sm font-bold text-white flex items-center gap-1.5 flex-wrap mb-3">
-        <span className="text-white/60">{carona.origem}</span>
-        <FiArrowRight size={12} className="text-white/25 shrink-0" />
+      <p className="text-sm font-bold flex items-center gap-1.5 flex-wrap mb-3" style={{ color: "#0F172A" }}>
+        <span style={{ color: "#64748B" }}>{carona.origem}</span>
+        <FiArrowRight size={12} style={{ color: "#94A3B8" }} className="shrink-0" />
         <span className="px-2 py-0.5 rounded-lg text-xs font-semibold"
-          style={{ background: "rgba(99,102,241,0.18)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)" }}>
+          style={{ background: "#EEF2FF", color: "#6366f1", border: "1px solid rgba(99,102,241,0.2)" }}>
           {carona.destino}
         </span>
       </p>
@@ -104,10 +91,10 @@ function CardCaronaMini({ carona }) {
           { icon: <FiUsers size={12} />, val: `${carona.vagas_disponiveis}/${carona.vagas}`, sub: "vagas" },
         ].map(({ icon, val, sub }, i) => (
           <div key={i} className="rounded-xl py-2.5"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <span className="text-white/30 flex justify-center mb-0.5">{icon}</span>
-            <p className="text-xs font-bold text-white">{val}</p>
-            <p className="text-[10px] text-white/25">{sub}</p>
+            style={{ background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
+            <span className="flex justify-center mb-0.5" style={{ color: "#64748B" }}>{icon}</span>
+            <p className="text-xs font-bold" style={{ color: "#0F172A" }}>{val}</p>
+            <p className="text-[10px]" style={{ color: "#94A3B8" }}>{sub}</p>
           </div>
         ))}
       </div>
@@ -148,8 +135,8 @@ export default function PerfilMotorista() {
   if (carregando) {
     return (
       <div className="min-h-screen flex items-center justify-center"
-        style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-        <svg className="animate-spin h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24">
+        style={{ background: "#F4F7FB" }}>
+        <svg className="animate-spin h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
         </svg>
@@ -160,9 +147,9 @@ export default function PerfilMotorista() {
   if (erro || !motorista) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4"
-        style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-        <p className="text-white/50">Motorista não encontrado.</p>
-        <button onClick={() => navigate(-1)} className="text-indigo-400 text-sm hover:text-indigo-300 transition">
+        style={{ background: "#F4F7FB" }}>
+        <p style={{ color: "#64748B" }}>Motorista não encontrado.</p>
+        <button onClick={() => navigate(-1)} className="text-indigo-500 text-sm hover:text-indigo-600 transition">
           Voltar
         </button>
       </div>
@@ -173,14 +160,7 @@ export default function PerfilMotorista() {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-
-      <Blob className="w-[500px] h-[500px] -top-32 -right-24 opacity-15"
-        style={{ background: `radial-gradient(circle, ${c1}, transparent 70%)` }}
-        animate={{ x: [0, -40, 0], y: [0, 30, 0] }} />
-      <Blob className="w-80 h-80 -bottom-20 -left-16 opacity-10"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 30, 0], y: [0, -20, 0] }} />
+      style={{ background: "#F4F7FB" }}>
 
       {/* Hero card */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 pt-8 pb-4">
@@ -189,18 +169,16 @@ export default function PerfilMotorista() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-2xl p-6"
           style={{
-            background: `linear-gradient(135deg, ${c1}22, ${c2}22)`,
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid ${c1}44`,
-            boxShadow: `0 8px 32px ${c1}22`,
+            background: "#FFFFFF",
+            border: `1px solid ${c1}25`,
+            boxShadow: `0 2px 16px ${c1}14`,
           }}
         >
           <button onClick={() => navigate(-1)}
             className="flex items-center gap-1.5 text-sm font-medium mb-6 transition"
-            style={{ color: "rgba(255,255,255,0.5)" }}
-            onMouseEnter={e => e.currentTarget.style.color = "#fff"}
-            onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}>
+            style={{ color: "#94A3B8" }}
+            onMouseEnter={e => e.currentTarget.style.color = "#0F172A"}
+            onMouseLeave={e => e.currentTarget.style.color = "#94A3B8"}>
             <FiArrowLeft /> Voltar
           </button>
 
@@ -209,22 +187,22 @@ export default function PerfilMotorista() {
             {motorista.foto_perfil ? (
               <img src={motorista.foto_perfil} alt={motorista.nome}
                 className="w-24 h-24 rounded-3xl object-cover shrink-0 shadow-xl"
-                style={{ border: `2px solid ${c1}88` }} />
+                style={{ border: `2px solid ${c1}44` }} />
             ) : (
               <div className="w-24 h-24 rounded-3xl flex items-center justify-center shrink-0 shadow-xl font-extrabold text-white select-none"
                 style={{
                   background: `linear-gradient(135deg, ${c1}, ${c2})`,
                   fontSize: 32,
-                  boxShadow: `0 8px 32px ${c1}55`,
+                  boxShadow: `0 8px 32px ${c1}40`,
                 }}>
                 {motorista.nome[0].toUpperCase()}
               </div>
             )}
 
             <div className="text-center sm:text-left flex-1">
-              <h1 className="text-3xl font-extrabold text-white mb-1">{motorista.nome}</h1>
+              <h1 className="text-3xl font-extrabold mb-1" style={{ color: "#0F172A" }}>{motorista.nome}</h1>
               <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full mb-3"
-                style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}>
+                style={{ background: "#EEF2FF", color: "#6366f1" }}>
                 <MdOutlineDirectionsCar /> Motorista
               </span>
               <div>
@@ -236,7 +214,7 @@ export default function PerfilMotorista() {
           {/* Bio */}
           {motorista.bio && (
             <p className="mt-5 text-sm leading-relaxed rounded-xl px-4 py-3"
-              style={{ color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              style={{ color: "#64748B", background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
               "{motorista.bio}"
             </p>
           )}
@@ -261,10 +239,10 @@ export default function PerfilMotorista() {
           ].map(({ val, label }, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
-              className="rounded-2xl p-5 text-center" style={GLASS}>
-              <p className="text-3xl font-extrabold text-white">{val}</p>
+              className="rounded-2xl p-5 text-center" style={CARD}>
+              <p className="text-3xl font-extrabold" style={{ color: "#0F172A" }}>{val}</p>
               <p className="text-xs mt-1 uppercase tracking-wide font-medium"
-                style={{ color: "rgba(255,255,255,0.4)" }}>{label}</p>
+                style={{ color: "#64748B" }}>{label}</p>
             </motion.div>
           ))}
         </div>
@@ -272,20 +250,20 @@ export default function PerfilMotorista() {
 
       {/* Caronas ativas */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 pb-10">
-        <h2 className="text-base font-bold text-white mb-3 flex items-center gap-2">
-          <MdOutlineDirectionsCar className="text-indigo-400" />
+        <h2 className="text-base font-bold mb-3 flex items-center gap-2" style={{ color: "#0F172A" }}>
+          <MdOutlineDirectionsCar className="text-indigo-500" />
           Caronas disponíveis
           {caronas.length > 0 && (
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-              style={{ background: "rgba(99,102,241,0.18)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)" }}>
+              style={{ background: "#EEF2FF", color: "#6366f1", border: "1px solid rgba(99,102,241,0.2)" }}>
               {caronas.length}
             </span>
           )}
         </h2>
         {caronas.length === 0 ? (
-          <div className="rounded-2xl py-12 text-center" style={GLASS}>
-            <MdOutlineDirectionsCar className="text-white/15 text-4xl mx-auto mb-2" />
-            <p className="text-sm text-white/30">Nenhuma carona ativa no momento</p>
+          <div className="rounded-2xl py-12 text-center" style={CARD}>
+            <MdOutlineDirectionsCar className="text-4xl mx-auto mb-2" style={{ color: "#94A3B8" }} />
+            <p className="text-sm" style={{ color: "#94A3B8" }}>Nenhuma carona ativa no momento</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">

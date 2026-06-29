@@ -31,17 +31,22 @@ import {
 import { MdOutlineDirectionsCar } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
 
-// Cores adaptadas para fundo escuro (glassmorphism)
 const UNI_META = {
-  "CEULP/ULBRA": { bar: "linear-gradient(135deg,#3b82f6,#6366f1)", dot: "#3b82f6", bg: "rgba(59,130,246,0.15)", color: "#93c5fd", border: "rgba(59,130,246,0.3)" },
-  "UFT":          { bar: "linear-gradient(135deg,#10b981,#14b8a6)", dot: "#10b981", bg: "rgba(16,185,129,0.15)", color: "#6ee7b7", border: "rgba(16,185,129,0.3)" },
-  "UniCatólica":  { bar: "linear-gradient(135deg,#a855f7,#7c3aed)", dot: "#a855f7", bg: "rgba(168,85,247,0.15)", color: "#d8b4fe", border: "rgba(168,85,247,0.3)" },
-  "Afya":         { bar: "linear-gradient(135deg,#14b8a6,#06b6d4)", dot: "#14b8a6", bg: "rgba(20,184,166,0.15)", color: "#5eead4", border: "rgba(20,184,166,0.3)" },
-  "IFTO":         { bar: "linear-gradient(135deg,#f97316,#eab308)", dot: "#f97316", bg: "rgba(249,115,22,0.15)", color: "#fdba74", border: "rgba(249,115,22,0.3)" },
-  "ITOP":         { bar: "linear-gradient(135deg,#f43f5e,#ec4899)", dot: "#f43f5e", bg: "rgba(244,63,94,0.15)", color: "#fda4af", border: "rgba(244,63,94,0.3)" },
+  "CEULP/ULBRA": { bar: "linear-gradient(135deg,#3b82f6,#6366f1)", dot: "#3b82f6", bg: "rgba(59,130,246,0.1)", color: "#3b82f6", border: "rgba(59,130,246,0.25)" },
+  "UFT":          { bar: "linear-gradient(135deg,#10b981,#14b8a6)", dot: "#10b981", bg: "rgba(16,185,129,0.1)", color: "#059669", border: "rgba(16,185,129,0.25)" },
+  "UniCatólica":  { bar: "linear-gradient(135deg,#a855f7,#7c3aed)", dot: "#a855f7", bg: "rgba(168,85,247,0.1)", color: "#7c3aed", border: "rgba(168,85,247,0.25)" },
+  "Afya":         { bar: "linear-gradient(135deg,#14b8a6,#06b6d4)", dot: "#14b8a6", bg: "rgba(20,184,166,0.1)", color: "#0d9488", border: "rgba(20,184,166,0.25)" },
+  "IFTO":         { bar: "linear-gradient(135deg,#f97316,#eab308)", dot: "#f97316", bg: "rgba(249,115,22,0.1)", color: "#ea580c", border: "rgba(249,115,22,0.25)" },
+  "ITOP":         { bar: "linear-gradient(135deg,#f43f5e,#ec4899)", dot: "#f43f5e", bg: "rgba(244,63,94,0.1)", color: "#e11d48", border: "rgba(244,63,94,0.25)" },
 };
-const DEFAULT_META = { bar: "linear-gradient(135deg,#94a3b8,#64748b)", dot: "#94a3b8", bg: "rgba(148,163,184,0.1)", color: "#cbd5e1", border: "rgba(148,163,184,0.2)" };
+const DEFAULT_META = { bar: "linear-gradient(135deg,#94a3b8,#64748b)", dot: "#94a3b8", bg: "rgba(148,163,184,0.1)", color: "#64748b", border: "rgba(148,163,184,0.2)" };
 const getMeta = (d) => UNI_META[d] ?? DEFAULT_META;
+
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+};
 
 function formatarData(data) {
   if (!data) return null;
@@ -77,42 +82,23 @@ function buildWhatsAppUrl(telefone, carona) {
   return `https://wa.me/${internacional}?text=${msg}`;
 }
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
-};
-
-function Blob({ className, style, animate }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      style={style}
-      animate={animate}
-      transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-    />
-  );
-}
-
 /* ── Sub-componentes ── */
 
 function SkeletonCard() {
   return (
-    <div className="rounded-2xl p-5 animate-pulse" style={GLASS}>
-      <div className="h-1.5 rounded-full mb-4" style={{ background: "rgba(255,255,255,0.08)" }} />
+    <div className="rounded-2xl p-5 animate-pulse" style={CARD}>
+      <div className="h-1.5 rounded-full mb-4" style={{ background: "#F1F5F9" }} />
       <div className="flex justify-between mb-4">
-        <div className="h-4 rounded w-2/3" style={{ background: "rgba(255,255,255,0.08)" }} />
-        <div className="h-5 rounded-full w-20" style={{ background: "rgba(255,255,255,0.08)" }} />
+        <div className="h-4 rounded w-2/3" style={{ background: "#F1F5F9" }} />
+        <div className="h-5 rounded-full w-20" style={{ background: "#F1F5F9" }} />
       </div>
       <div className="grid grid-cols-3 gap-2 mb-3">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="h-16 rounded-xl" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <div key={i} className="h-16 rounded-xl" style={{ background: "#F1F5F9" }} />
         ))}
       </div>
-      <div className="h-1.5 rounded-full mb-4" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-10 rounded-xl" style={{ background: "rgba(255,255,255,0.08)" }} />
+      <div className="h-1.5 rounded-full mb-4" style={{ background: "#F1F5F9" }} />
+      <div className="h-10 rounded-xl" style={{ background: "#F1F5F9" }} />
     </div>
   );
 }
@@ -121,21 +107,21 @@ function BadgeVagas({ vagas }) {
   if (vagas === 0)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-        style={{ background: "rgba(239,68,68,0.18)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.3)" }}>
-        <span className="w-1.5 h-1.5 rounded-full bg-red-400" />Esgotado
+        style={{ background: "rgba(239,68,68,0.1)", color: "#dc2626", border: "1px solid rgba(239,68,68,0.2)" }}>
+        <span className="w-1.5 h-1.5 rounded-full bg-red-500" />Esgotado
       </span>
     );
   if (vagas <= 2)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-        style={{ background: "rgba(245,158,11,0.18)", color: "#fcd34d", border: "1px solid rgba(245,158,11,0.3)" }}>
+        style={{ background: "rgba(245,158,11,0.1)", color: "#d97706", border: "1px solid rgba(245,158,11,0.2)" }}>
         <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />Últimas vagas
       </span>
     );
   return (
     <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-      style={{ background: "rgba(16,185,129,0.18)", color: "#6ee7b7", border: "1px solid rgba(16,185,129,0.3)" }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />Disponível
+      style={{ background: "rgba(16,185,129,0.1)", color: "#059669", border: "1px solid rgba(16,185,129,0.2)" }}>
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />Disponível
     </span>
   );
 }
@@ -151,7 +137,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
 
   const btnStyle = disponivel
     ? { background: meta.bar }
-    : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.25)", cursor: "not-allowed" };
+    : { background: "#F1F5F9", color: "#94A3B8", cursor: "not-allowed" };
 
   const btnClass = `w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
     disponivel && !esteReservando ? "text-white hover:opacity-90 hover:shadow-lg active:scale-[0.98]" : ""
@@ -161,20 +147,20 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01, boxShadow: "0 12px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}
+      whileHover={{ scale: 1.01, boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className="card-enter rounded-2xl overflow-hidden flex flex-col"
-      style={GLASS}
+      style={CARD}
     >
-      <div className="h-1.5 w-full" style={{ background: disponivel ? meta.bar : "rgba(255,255,255,0.08)" }} />
+      <div className="h-1.5 w-full" style={{ background: disponivel ? meta.bar : "#F1F5F9" }} />
 
       <div className="p-5 flex flex-col flex-1">
         {/* Título + badge */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-white text-sm leading-snug flex items-center gap-1.5 flex-wrap mb-1">
+            <p className="font-bold text-sm leading-snug flex items-center gap-1.5 flex-wrap mb-1" style={{ color: "#0F172A" }}>
               <span>{carona.origem}</span>
-              <FiArrowRight className="text-white/25 shrink-0" />
+              <FiArrowRight style={{ color: "#94A3B8" }} className="shrink-0" />
               <span
                 className="font-semibold px-2 py-0.5 rounded-lg text-xs"
                 style={{ background: meta.bg, color: meta.color, border: `1px solid ${meta.border}` }}
@@ -184,7 +170,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
             </p>
             {distancia != null && (
               <span className="inline-flex items-center gap-1 text-xs font-medium"
-                style={{ color: "rgba(255,255,255,0.4)" }}>
+                style={{ color: "#94A3B8" }}>
                 <FiMapPin size={10} className="text-indigo-400" />
                 {formatarDistancia(distancia)} de você
               </span>
@@ -205,10 +191,10 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
             { icon: <FiUsers />, val: `${carona.vagas_disponiveis}/${carona.vagas}`, label: "vagas" },
           ].map(({ icon, val, label }, i) => (
             <div key={i} className="flex flex-col items-center gap-1 rounded-xl py-3"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <span className="text-white/35">{icon}</span>
-              <span className="text-xs font-bold text-white">{val}</span>
-              <span className="text-xs text-white/30">{label}</span>
+              style={{ background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
+              <span style={{ color: "#64748B" }}>{icon}</span>
+              <span className="text-xs font-bold" style={{ color: "#0F172A" }}>{val}</span>
+              <span className="text-xs" style={{ color: "#64748B" }}>{label}</span>
             </div>
           ))}
         </div>
@@ -217,7 +203,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
         <Link
           to={`/motorista/${carona.motorista_id}`}
           className="flex items-center gap-1.5 mb-3 text-xs group"
-          style={{ color: "rgba(255,255,255,0.35)" }}
+          style={{ color: "#94A3B8" }}
           onClick={e => e.stopPropagation()}
         >
           {carona.motorista_foto ? (
@@ -225,7 +211,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
               src={carona.motorista_foto}
               alt=""
               className="w-5 h-5 rounded-full object-cover shrink-0"
-              style={{ border: "1px solid rgba(255,255,255,0.15)" }}
+              style={{ border: "1px solid #E2E8F0" }}
             />
           ) : (
             <div
@@ -238,25 +224,29 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
           {carona.motorista_placa && (
             <span
               className="px-2 py-0.5 rounded font-mono font-bold tracking-widest transition-colors"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.55)" }}
-              onMouseEnter={e => { e.currentTarget.style.color = "#a5b4fc"; e.currentTarget.style.borderColor = "rgba(99,102,241,0.4)"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+              style={{ background: "#F1F5F9", border: "1px solid #E2E8F0", color: "#64748B" }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#6366f1"; e.currentTarget.style.borderColor = "rgba(99,102,241,0.4)"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#64748B"; e.currentTarget.style.borderColor = "#E2E8F0"; }}
             >
               {carona.motorista_placa.toUpperCase()}
             </span>
           )}
-          <span className="group-hover:text-white/60 transition-colors">
+          <span
+            onMouseEnter={e => { e.currentTarget.style.color = "#6366f1"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "#94A3B8"; }}
+            className="transition-colors"
+          >
             por {carona.motorista_nome?.split(" ")[0]}
           </span>
         </Link>
 
         {/* Barra de ocupação */}
         <div className="mb-4">
-          <div className="flex items-center justify-between text-xs text-white/30 mb-1">
+          <div className="flex items-center justify-between text-xs mb-1" style={{ color: "#94A3B8" }}>
             <span>Ocupação</span>
             <span>{ocupacaoPct}% preenchido</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "#F1F5F9" }}>
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
@@ -271,7 +261,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
         {reservado ? (
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold"
-              style={{ background: "rgba(16,185,129,0.15)", color: "#6ee7b7", border: "1px solid rgba(16,185,129,0.3)" }}>
+              style={{ background: "rgba(16,185,129,0.1)", color: "#059669", border: "1px solid rgba(16,185,129,0.2)" }}>
               <FiCheckCircle />Reservado!
             </div>
             {carona.motorista_telefone && (
@@ -282,7 +272,7 @@ function CardCarona({ carona, onReservar, reservando, reservado, distancia }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all"
-                style={{ background: "rgba(37,211,102,0.12)", color: "#4ade80", border: "1px solid rgba(37,211,102,0.3)" }}
+                style={{ background: "rgba(37,211,102,0.1)", color: "#16a34a", border: "1px solid rgba(37,211,102,0.25)" }}
               >
                 <FaWhatsapp className="text-base" />
                 Entrar em contato
@@ -315,13 +305,13 @@ function EmptyState({ filtroIES, onClearFilter }) {
   return (
     <div className="col-span-2 flex flex-col items-center justify-center py-20 text-center">
       <div className="w-24 h-24 rounded-3xl flex items-center justify-center mb-5"
-        style={{ background: meta.bg, border: `1px solid ${meta.border}` }}>
-        <MdOutlineDirectionsCar className="text-5xl" style={{ color: meta.color }} />
+        style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.15)" }}>
+        <MdOutlineDirectionsCar className="text-5xl text-indigo-500" />
       </div>
-      <h3 className="text-lg font-bold text-white mb-2">
+      <h3 className="text-lg font-bold mb-2" style={{ color: "#0F172A" }}>
         {filtroIES ? `Nenhuma carona para ${filtroIES}` : "Nenhuma carona disponível"}
       </h3>
-      <p className="text-white/40 text-sm max-w-xs mb-5">
+      <p className="text-sm max-w-xs mb-5" style={{ color: "#64748B" }}>
         {filtroIES
           ? "Nenhuma carona disponível para este destino no momento."
           : "As caronas aparecerão aqui assim que forem cadastradas."}
@@ -330,7 +320,7 @@ function EmptyState({ filtroIES, onClearFilter }) {
         <button
           onClick={onClearFilter}
           className="text-sm font-semibold px-4 py-2 rounded-xl transition"
-          style={{ background: meta.bg, color: meta.color, border: `1px solid ${meta.border}` }}
+          style={{ background: "#EEF2FF", color: "#6366f1", border: "1px solid rgba(99,102,241,0.2)" }}
         >
           Ver todas as instituições
         </button>
@@ -514,8 +504,8 @@ function ComoFunciona() {
         className="text-center mb-10"
       >
         <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2"
-          style={{ color: "rgba(165,180,252,0.7)" }}>Como funciona</p>
-        <h2 className="text-3xl font-extrabold text-white">Simples assim</h2>
+          style={{ color: "#6366f1" }}>Como funciona</p>
+        <h2 className="text-3xl font-extrabold" style={{ color: "#0F172A" }}>Simples assim</h2>
       </motion.div>
 
       <div className="grid md:grid-cols-3 gap-5">
@@ -526,15 +516,15 @@ function ComoFunciona() {
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: i * 0.12 }}
             className="relative rounded-2xl p-6"
-            style={GLASS}>
+            style={CARD}>
             <span className="absolute -top-3 left-5 text-[10px] font-black px-2.5 py-1 rounded-full text-white"
               style={{ background: p.cor }}>{p.num}</span>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-              style={{ background: `${p.cor}22`, color: p.cor, border: `1px solid ${p.cor}44` }}>
+              style={{ background: `${p.cor}15`, color: p.cor, border: `1px solid ${p.cor}30` }}>
               {p.icon}
             </div>
-            <h3 className="font-bold text-white mb-1.5">{p.titulo}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.42)" }}>{p.desc}</p>
+            <h3 className="font-bold mb-1.5" style={{ color: "#0F172A" }}>{p.titulo}</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "#64748B" }}>{p.desc}</p>
           </motion.div>
         ))}
       </div>
@@ -565,9 +555,9 @@ function MotoristaView({ navigate }) {
       {stats.carregando && (
         <div className="grid grid-cols-2 gap-3 mb-8">
           {[0, 1].map((i) => (
-            <div key={i} className="rounded-2xl p-6 animate-pulse" style={GLASS}>
-              <div className="h-8 rounded w-16 mx-auto mb-2" style={{ background: "rgba(255,255,255,0.1)" }} />
-              <div className="h-3 rounded w-28 mx-auto" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <div key={i} className="rounded-2xl p-6 animate-pulse" style={CARD}>
+              <div className="h-8 rounded w-16 mx-auto mb-2" style={{ background: "#F1F5F9" }} />
+              <div className="h-3 rounded w-28 mx-auto" style={{ background: "#F1F5F9" }} />
             </div>
           ))}
         </div>
@@ -584,10 +574,10 @@ function MotoristaView({ navigate }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className="rounded-2xl p-5 text-center"
-              style={GLASS}
+              style={CARD}
             >
-              <p className="text-3xl font-extrabold text-white">{val}</p>
-              <p className="text-xs text-white/40 mt-1 uppercase tracking-wide font-medium">{label}</p>
+              <p className="text-3xl font-extrabold" style={{ color: "#0F172A" }}>{val}</p>
+              <p className="text-xs mt-1 uppercase tracking-wide font-medium" style={{ color: "#64748B" }}>{label}</p>
             </motion.div>
           ))}
         </div>
@@ -596,11 +586,11 @@ function MotoristaView({ navigate }) {
       {/* CTA */}
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
-          style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.3)" }}>
-          <MdOutlineDirectionsCar className="text-indigo-400 text-3xl" />
+          style={{ background: "#EEF2FF" }}>
+          <MdOutlineDirectionsCar className="text-indigo-500 text-3xl" />
         </div>
-        <h2 className="text-2xl font-extrabold text-white mb-2">O que você quer fazer hoje?</h2>
-        <p className="text-white/40 text-sm max-w-xs mx-auto">
+        <h2 className="text-2xl font-extrabold mb-2" style={{ color: "#0F172A" }}>O que você quer fazer hoje?</h2>
+        <p className="text-sm max-w-xs mx-auto" style={{ color: "#64748B" }}>
           Publique novas caronas ou gerencie as que você já criou.
         </p>
       </div>
@@ -612,21 +602,21 @@ function MotoristaView({ navigate }) {
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/oferecer")}
           className="group flex flex-col items-start gap-4 rounded-2xl p-6 text-left transition-colors duration-200"
-          style={GLASS}
+          style={CARD}
         >
           <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)", boxShadow: "0 4px 16px rgba(99,102,241,0.4)" }}>
+            style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)", boxShadow: "0 4px 16px rgba(99,102,241,0.3)" }}>
             <FiPlus className="text-white text-xl" />
           </div>
           <div>
-            <p className="font-bold text-white text-base mb-1 group-hover:text-indigo-300 transition-colors">
+            <p className="font-bold text-base mb-1 transition-colors" style={{ color: "#0F172A" }}>
               Oferecer carona
             </p>
-            <p className="text-sm text-white/40 leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: "#64748B" }}>
               Publique uma nova carona e permita que passageiros reservem vagas.
             </p>
           </div>
-          <span className="mt-auto text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
+          <span className="mt-auto text-xs font-semibold text-indigo-500">
             Publicar agora →
           </span>
         </motion.button>
@@ -636,21 +626,21 @@ function MotoristaView({ navigate }) {
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/minhas-caronas")}
           className="group flex flex-col items-start gap-4 rounded-2xl p-6 text-left transition-colors duration-200"
-          style={GLASS}
+          style={CARD}
         >
           <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 16px rgba(6,182,212,0.4)" }}>
+            style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 16px rgba(6,182,212,0.3)" }}>
             <FiList className="text-white text-xl" />
           </div>
           <div>
-            <p className="font-bold text-white text-base mb-1 group-hover:text-cyan-300 transition-colors">
+            <p className="font-bold text-base mb-1 transition-colors" style={{ color: "#0F172A" }}>
               Minhas caronas
             </p>
-            <p className="text-sm text-white/40 leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: "#64748B" }}>
               Veja e gerencie todas as caronas que você já publicou.
             </p>
           </div>
-          <span className="mt-auto text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors">
+          <span className="mt-auto text-xs font-semibold" style={{ color: "#0891b2" }}>
             Ver caronas →
           </span>
         </motion.button>
@@ -660,21 +650,21 @@ function MotoristaView({ navigate }) {
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/dashboard")}
           className="group flex flex-col items-start gap-4 rounded-2xl p-6 text-left transition-colors duration-200 sm:col-span-2 lg:col-span-1"
-          style={GLASS}
+          style={CARD}
         >
           <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #10b981, #14b8a6)", boxShadow: "0 4px 16px rgba(16,185,129,0.4)" }}>
+            style={{ background: "linear-gradient(135deg, #10b981, #14b8a6)", boxShadow: "0 4px 16px rgba(16,185,129,0.3)" }}>
             <FiBarChart2 className="text-white text-xl" />
           </div>
           <div>
-            <p className="font-bold text-white text-base mb-1 group-hover:text-emerald-300 transition-colors">
+            <p className="font-bold text-base mb-1 transition-colors" style={{ color: "#0F172A" }}>
               Dashboard de ganhos
             </p>
-            <p className="text-sm text-white/40 leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: "#64748B" }}>
               Veja seu histórico de receita e caronas concluídas por mês.
             </p>
           </div>
-          <span className="mt-auto text-xs font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors">
+          <span className="mt-auto text-xs font-semibold text-emerald-600">
             Ver ganhos →
           </span>
         </motion.button>
@@ -703,7 +693,7 @@ function HeroIllustration() {
             <stop offset="100%" stopColor="transparent" />
           </linearGradient>
         </defs>
-        <path d="M24 32 L256 32" stroke="url(#routeGrad)" strokeWidth="1.5" strokeDasharray="5 5" opacity="0.35" />
+        <path d="M24 32 L256 32" stroke="url(#routeGrad)" strokeWidth="1.5" strokeDasharray="5 5" opacity="0.5" />
         <circle cx="24" cy="32" r="5" fill="#6366f1" opacity="0.7" />
         <circle cx="256" cy="32" r="5" fill="#10b981" opacity="0.7" />
         <circle cx="256" cy="32" r="9" fill="#10b981" opacity="0.15" />
@@ -721,7 +711,7 @@ function HeroIllustration() {
           className="w-9 h-9 rounded-xl flex items-center justify-center"
           style={{
             background: "linear-gradient(135deg,#6366f1,#3b82f6)",
-            boxShadow: "0 4px 16px rgba(99,102,241,0.55)",
+            boxShadow: "0 4px 16px rgba(99,102,241,0.4)",
           }}
         >
           <MdOutlineDirectionsCar className="text-white text-lg" />
@@ -729,10 +719,10 @@ function HeroIllustration() {
       </motion.div>
 
       {/* Labels */}
-      <span className="absolute left-0 -bottom-1 text-[10px] font-semibold tracking-wide" style={{ color: "rgba(99,102,241,0.6)" }}>
+      <span className="absolute left-0 -bottom-1 text-[10px] font-semibold tracking-wide" style={{ color: "#6366f1" }}>
         Origem
       </span>
-      <span className="absolute right-0 -bottom-1 text-[10px] font-semibold tracking-wide" style={{ color: "rgba(16,185,129,0.6)" }}>
+      <span className="absolute right-0 -bottom-1 text-[10px] font-semibold tracking-wide" style={{ color: "#10b981" }}>
         Destino
       </span>
     </motion.div>
@@ -863,7 +853,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
+      style={{ background: "#F4F7FB" }}>
 
       {/* Pull-to-refresh indicator */}
       {pulling && (
@@ -872,7 +862,7 @@ export default function Home() {
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className="w-10 h-10 rounded-full flex items-center justify-center shadow-xl"
-            style={{ background: "rgba(99,102,241,0.92)", backdropFilter: "blur(12px)" }}
+            style={{ background: "#6366f1" }}
           >
             <FiRefreshCw
               className="text-white"
@@ -882,38 +872,16 @@ export default function Home() {
         </div>
       )}
 
-      {/* Blobs animados de fundo */}
-      <Blob
-        className="w-[700px] h-[700px] -top-64 -left-48 opacity-20"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 60, 0], y: [0, 50, 0], scale: [1, 1.1, 1] }}
-      />
-      <Blob
-        className="w-[500px] h-[500px] -bottom-48 -right-32 opacity-15"
-        style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }}
-        animate={{ x: [0, -50, 0], y: [0, -40, 0], scale: [1, 1.15, 1] }}
-      />
-      <Blob
-        className="w-96 h-96 opacity-10"
-        style={{ background: "radial-gradient(circle, #06b6d4, transparent 70%)", top: "40%", right: "5%" }}
-        animate={{ x: [0, -30, 10, 0], y: [0, 40, -20, 0] }}
-      />
-      <Blob
-        className="w-72 h-72 opacity-10"
-        style={{ background: "radial-gradient(circle, #818cf8, transparent 70%)", top: "60%", left: "20%" }}
-        animate={{ x: [0, 30, -10, 0], y: [0, -30, 15, 0] }}
-      />
-
       {/* ── Hero ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 pt-10 pb-4">
         {isMotorista ? (
           /* Hero compacto para motorista */
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
             className="text-center pt-6 pb-2">
-            <h1 className="text-4xl font-extrabold text-white mb-2">
+            <h1 className="text-4xl font-extrabold mb-2" style={{ color: "#0F172A" }}>
               Olá, {usuario.nome.split(" ")[0]}!
             </h1>
-            <p className="text-white/40">Gerencie suas caronas e conecte-se com passageiros.</p>
+            <p style={{ color: "#64748B" }}>Gerencie suas caronas e conecte-se com passageiros.</p>
           </motion.div>
         ) : (
           /* Hero split: texto + carro */
@@ -926,21 +894,21 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="flex flex-col items-start"
             >
-              <div className="inline-flex items-center gap-2 text-indigo-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6"
-                style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)" }}>
+              <div className="inline-flex items-center gap-2 text-indigo-600 text-xs font-semibold px-4 py-1.5 rounded-full mb-6"
+                style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.2)" }}>
                 <MdOutlineDirectionsCar />
                 Caronas universitárias · Palmas, TO
               </div>
 
               {usuario ? (
-                <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-[1.05] tracking-tight">
+                <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-[1.05] tracking-tight" style={{ color: "#0F172A" }}>
                   Olá,<br/>{usuario.nome.split(" ")[0]}!
                 </h1>
               ) : (
-                <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-[1.05] tracking-tight">
+                <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-[1.05] tracking-tight" style={{ color: "#0F172A" }}>
                   Sua carona<br/>para a{" "}
                   <span style={{
-                    background: "linear-gradient(135deg, #818cf8 0%, #60a5fa 50%, #34d399 100%)",
+                    background: "linear-gradient(135deg, #6366f1 0%, #3b82f6 50%, #10b981 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -950,7 +918,7 @@ export default function Home() {
                 </h1>
               )}
 
-              <p className="text-white/50 text-lg max-w-md mb-8 leading-relaxed">
+              <p className="text-lg max-w-md mb-8 leading-relaxed" style={{ color: "#64748B" }}>
                 {usuario
                   ? "Veja as caronas disponíveis agora ou use os filtros abaixo para encontrar a sua."
                   : "Conecte-se com estudantes da sua universidade. Rápido, seguro e completamente gratuito."}
@@ -962,7 +930,7 @@ export default function Home() {
                   whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                   onClick={() => ridesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
                   className="flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-bold text-white"
-                  style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)", boxShadow: "0 4px 24px rgba(99,102,241,0.55)" }}>
+                  style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)", boxShadow: "0 4px 24px rgba(99,102,241,0.4)" }}>
                   <FiSearch size={15} />
                   Buscar carona
                 </motion.button>
@@ -970,7 +938,7 @@ export default function Home() {
                   <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                     <Link to="/cadastro"
                       className="flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-bold"
-                      style={{ color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                      style={{ color: "#64748B", background: "#FFFFFF", border: "1px solid #E2E8F0" }}>
                       Criar conta grátis <FiArrowRight size={14} />
                     </Link>
                   </motion.div>
@@ -986,9 +954,9 @@ export default function Home() {
                     { val: totalVagas,        label: "vagas livres"   },
                     { val: new Set(caronas.map(c => c.destino)).size, label: "destinos" },
                   ].map(({ val, label }, i) => (
-                    <div key={i} className="text-center">
-                      <p className="text-3xl font-extrabold text-white leading-none">{val}</p>
-                      <p className="text-xs mt-1 font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</p>
+                    <div key={i} className="text-center px-4 py-3 rounded-xl" style={{ background: "#FFFFFF", border: "1px solid #E9EEF4", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
+                      <p className="text-3xl font-extrabold leading-none" style={{ color: "#0F172A" }}>{val}</p>
+                      <p className="text-xs mt-1 font-medium" style={{ color: "#64748B" }}>{label}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -1024,8 +992,8 @@ export default function Home() {
                   className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shrink-0 transition-all"
                   style={
                     filtroIES === ""
-                      ? { background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }
-                      : { background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.45)", border: "1px solid rgba(255,255,255,0.08)" }
+                      ? { background: "linear-gradient(135deg,#6366f1,#3b82f6)", color: "#fff", border: "1px solid transparent" }
+                      : { background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }
                   }
                 >
                   Todas
@@ -1039,7 +1007,7 @@ export default function Home() {
                   style={
                     ordenarDistancia
                       ? { background: "linear-gradient(135deg,#6366f1,#3b82f6)", color: "#fff", border: "1px solid transparent" }
-                      : { background: "rgba(99,102,241,0.1)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.25)" }
+                      : { background: "#EEF2FF", color: "#6366f1", border: "1px solid rgba(99,102,241,0.2)" }
                   }
                 >
                   {buscandoGps
@@ -1059,12 +1027,12 @@ export default function Home() {
                       style={
                         ativo
                           ? { background: meta.bar, color: "#fff", border: "1px solid transparent" }
-                          : { background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.45)", border: "1px solid rgba(255,255,255,0.08)" }
+                          : { background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }
                       }
                     >
                       <span
                         className="w-2 h-2 rounded-full shrink-0"
-                        style={{ background: ativo ? "rgba(255,255,255,0.8)" : meta.dot }}
+                        style={{ background: ativo ? "rgba(255,255,255,0.9)" : meta.dot }}
                       />
                       {uni}
                     </button>
@@ -1076,21 +1044,27 @@ export default function Home() {
 
           {/* Filtro por data */}
           <div className="max-w-5xl mx-auto px-4 pb-2">
-            <div className="flex items-center gap-2"
-              style={{ color: "rgba(255,255,255,0.35)" }}>
+            <div className="flex items-center gap-2" style={{ color: "#64748B" }}>
               <FiCalendar size={13} className="shrink-0" />
               <input
                 type="date"
                 value={filtroData}
                 onChange={e => mudarFiltroData(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
-                className="bg-transparent text-sm font-medium outline-none"
-                style={{ color: filtroData ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)", colorScheme: "dark" }}
+                className="rounded-lg px-3 py-1.5 text-sm font-medium outline-none transition-all"
+                style={{
+                  background: "#F8FAFC",
+                  border: "1px solid #E2E8F0",
+                  color: filtroData ? "#0F172A" : "#94A3B8",
+                  colorScheme: "light",
+                }}
+                onFocus={e => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; }}
+                onBlur={e => { e.target.style.borderColor = "#E2E8F0"; e.target.style.background = "#F8FAFC"; }}
               />
               {filtroData && (
                 <button
                   onClick={() => mudarFiltroData("")}
-                  className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition ml-1"
+                  className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition ml-1"
                 >
                   Limpar
                 </button>
@@ -1102,7 +1076,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-4 py-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <h2 className="text-lg font-bold text-white">Caronas disponíveis</h2>
+                <h2 className="text-lg font-bold" style={{ color: "#0F172A" }}>Caronas disponíveis</h2>
                 {!carregando && (
                   <motion.button
                     onClick={buscarCaronas}
@@ -1111,23 +1085,23 @@ export default function Home() {
                     title="Atualizar caronas"
                     className="w-7 h-7 rounded-full flex items-center justify-center transition-colors duration-200"
                     style={{
-                      background: "rgba(255,255,255,0.06)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      color: "rgba(255,255,255,0.35)",
+                      background: "#F1F5F9",
+                      border: "1px solid #E2E8F0",
+                      color: "#64748B",
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.color = "#818cf8"; e.currentTarget.style.background = "rgba(99,102,241,0.15)"; e.currentTarget.style.borderColor = "rgba(99,102,241,0.3)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+                    onMouseEnter={e => { e.currentTarget.style.color = "#6366f1"; e.currentTarget.style.background = "#EEF2FF"; e.currentTarget.style.borderColor = "rgba(99,102,241,0.3)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "#64748B"; e.currentTarget.style.background = "#F1F5F9"; e.currentTarget.style.borderColor = "#E2E8F0"; }}
                   >
                     <FiRefreshCw size={13} />
                   </motion.button>
                 )}
               </div>
               {!carregando && (
-                <p className="text-sm text-white/40">
+                <p className="text-sm" style={{ color: "#64748B" }}>
                   {filtroIES ? `Destino: ${filtroIES}` : "Todas as instituições"}
                   {filtroData && ` · ${new Date(filtroData + "T00:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}`}
                   {" · "}
-                  <span className="font-medium text-white/60">
+                  <span className="font-medium" style={{ color: "#0F172A" }}>
                     {total} resultado{total !== 1 ? "s" : ""}
                   </span>
                 </p>
@@ -1141,14 +1115,14 @@ export default function Home() {
                 ? (
                   <div className="col-span-2 flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-                      style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)" }}>
-                      <FiAlertCircle className="text-red-400 text-3xl" />
+                      style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}>
+                      <FiAlertCircle className="text-red-500 text-3xl" />
                     </div>
-                    <p className="text-white font-semibold mb-1">Falha ao carregar</p>
-                    <p className="text-white/40 text-sm mb-4">Verifique sua conexão e tente novamente.</p>
+                    <p className="font-semibold mb-1" style={{ color: "#0F172A" }}>Falha ao carregar</p>
+                    <p className="text-sm mb-4" style={{ color: "#64748B" }}>Verifique sua conexão e tente novamente.</p>
                     <button
                       onClick={buscarCaronas}
-                      className="flex items-center gap-2 text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition"
+                      className="flex items-center gap-2 text-sm font-semibold text-indigo-500 hover:text-indigo-600 transition"
                     >
                       <FiRefreshCw /> Tentar novamente
                     </button>
@@ -1175,18 +1149,22 @@ export default function Home() {
                   onClick={() => buscarCaronas({ novaPagina: pagina - 1 })}
                   disabled={pagina === 1}
                   className="w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-30"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)" }}
+                  style={{ background: "#F1F5F9", border: "1px solid #E2E8F0", color: "#64748B" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "#EEF2FF"; e.currentTarget.style.color = "#6366f1"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "#F1F5F9"; e.currentTarget.style.color = "#64748B"; }}
                 >
                   <FiChevronLeft size={16} />
                 </button>
-                <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  {pagina} <span style={{ color: "rgba(255,255,255,0.25)" }}>de</span> {totalPaginas}
+                <span className="text-sm font-semibold" style={{ color: "#64748B" }}>
+                  {pagina} <span style={{ color: "#94A3B8" }}>de</span> {totalPaginas}
                 </span>
                 <button
                   onClick={() => buscarCaronas({ novaPagina: pagina + 1 })}
                   disabled={pagina === totalPaginas}
                   className="w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-30"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)" }}
+                  style={{ background: "#F1F5F9", border: "1px solid #E2E8F0", color: "#64748B" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "#EEF2FF"; e.currentTarget.style.color = "#6366f1"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "#F1F5F9"; e.currentTarget.style.color = "#64748B"; }}
                 >
                   <FiChevronRight size={16} />
                 </button>

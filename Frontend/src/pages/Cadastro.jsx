@@ -13,24 +13,20 @@ import {
   FiArrowRight, FiTruck, FiCreditCard,
 } from "react-icons/fi";
 
-const PAGE_BG = `
-  radial-gradient(ellipse 80% 50% at 50% -5%, rgba(99,102,241,0.35) 0%, transparent 100%),
-  radial-gradient(ellipse 50% 40% at 100% 100%, rgba(59,130,246,0.15) 0%, transparent 100%),
-  #030712
-`;
+const PAGE_BG = `radial-gradient(ellipse 80% 50% at 50% -5%, rgba(99,102,241,0.08) 0%, transparent 100%), #F4F7FB`;
 
-const INPUT_CLASS = "w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 focus:outline-none transition-all disabled:opacity-50";
-const INPUT_STYLE = { background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" };
-const onFocus = (e) => { e.target.style.borderColor = "rgba(99,102,241,0.8)"; e.target.style.background = "rgba(255,255,255,0.09)"; };
-const onBlur  = (e) => { e.target.style.borderColor = "rgba(255,255,255,0.1)";  e.target.style.background = "rgba(255,255,255,0.06)"; };
+const INPUT_CLASS = "w-full px-4 py-3 rounded-xl text-sm focus:outline-none transition-all disabled:opacity-50";
+const INPUT_STYLE = { background: "#F8FAFC", border: "1px solid #E2E8F0", color: "#0F172A" };
+const onFocus = (e) => { e.target.style.borderColor = "rgba(99,102,241,0.7)"; e.target.style.background = "#FFFFFF"; };
+const onBlur  = (e) => { e.target.style.borderColor = "#E2E8F0";              e.target.style.background = "#F8FAFC"; };
 
 function FieldError({ msg }) {
   if (!msg) return null;
-  return <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1"><FiAlertCircle size={11} />{msg}</p>;
+  return <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#EF4444" }}><FiAlertCircle size={11} />{msg}</p>;
 }
 
 function Label({ children }) {
-  return <label className="text-xs font-semibold text-white/40 uppercase tracking-widest block mb-2">{children}</label>;
+  return <label className="text-xs font-semibold uppercase tracking-widest block mb-2" style={{ color: "#64748B" }}>{children}</label>;
 }
 
 function Spinner() {
@@ -47,11 +43,11 @@ function Sucesso() {
     <div className="min-h-screen flex items-center justify-center" style={{ background: PAGE_BG }}>
       <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center p-10">
         <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5"
-          style={{ background: "rgba(16,185,129,0.12)", border: "2px solid rgba(16,185,129,0.3)" }}>
-          <FiCheckCircle className="text-emerald-400" size={36} />
+          style={{ background: "rgba(16,185,129,0.10)", border: "2px solid rgba(16,185,129,0.3)" }}>
+          <FiCheckCircle className="text-emerald-500" size={36} />
         </div>
-        <h2 className="text-2xl font-extrabold text-white mb-2">Conta criada!</h2>
-        <p className="text-white/35 text-sm">Redirecionando para o login…</p>
+        <h2 className="text-2xl font-extrabold mb-2" style={{ color: "#0F172A" }}>Conta criada!</h2>
+        <p className="text-sm" style={{ color: "#64748B" }}>Redirecionando para o login…</p>
       </motion.div>
     </div>
   );
@@ -91,22 +87,18 @@ export default function Cadastro() {
       >
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full blur-2xl opacity-60"
-              style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)", transform: "scale(1.8)" }} />
-            <img src={logo} alt="UniCaronas" className="relative w-62 h-62 object-contain" />
-          </div>
+          <img src={logo} alt="UniCaronas" className="w-62 h-62 object-contain" />
         </div>
 
         {/* Card */}
         <div style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "#FFFFFF",
+          border: "1px solid #E2E8F0",
           borderRadius: "20px",
-          boxShadow: "0 0 0 1px rgba(255,255,255,0.03), 0 24px 64px rgba(0,0,0,0.6)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)",
         }} className="p-8">
-          <h1 className="text-2xl font-extrabold text-white mb-1">Criar conta</h1>
-          <p className="text-white/35 text-sm mb-7">Junte-se à comunidade UniCaronas</p>
+          <h1 className="text-2xl font-extrabold mb-1" style={{ color: "#0F172A" }}>Criar conta</h1>
+          <p className="text-sm mb-7" style={{ color: "#64748B" }}>Junte-se à comunidade UniCaronas</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
@@ -154,11 +146,11 @@ export default function Cadastro() {
               <Label>Tipo de conta</Label>
               <select {...register("tipo")} defaultValue="" disabled={isSubmitting}
                 className={INPUT_CLASS + " cursor-pointer"}
-                style={{ ...INPUT_STYLE, color: tipo ? "white" : "rgba(255,255,255,0.2)" }}
+                style={{ ...INPUT_STYLE, color: tipo ? "#0F172A" : "#94A3B8" }}
                 onFocus={onFocus} onBlur={onBlur}>
-                <option value="" disabled style={{ background: "#0f172a" }}>Selecione…</option>
-                <option value="motorista" style={{ background: "#0f172a" }}>Motorista</option>
-                <option value="passageiro" style={{ background: "#0f172a" }}>Passageiro</option>
+                <option value="" disabled style={{ background: "#FFFFFF", color: "#94A3B8" }}>Selecione…</option>
+                <option value="motorista" style={{ background: "#FFFFFF", color: "#0F172A" }}>Motorista</option>
+                <option value="passageiro" style={{ background: "#FFFFFF", color: "#0F172A" }}>Passageiro</option>
               </select>
               <FieldError msg={errors.tipo?.message} />
             </div>
@@ -185,7 +177,7 @@ export default function Cadastro() {
                     <FieldError msg={errors.cnh?.message} />
                   </div>
                 </div>
-                <p className="text-xs text-white/25">Placa e CNH obrigatórias para motoristas.</p>
+                <p className="text-xs" style={{ color: "#94A3B8" }}>Placa e CNH obrigatórias para motoristas.</p>
               </motion.div>
             )}
 
@@ -201,13 +193,15 @@ export default function Cadastro() {
           </form>
         </div>
 
-        <p className="text-center text-white/30 text-sm mt-6">
+        <p className="text-center text-sm mt-6" style={{ color: "#64748B" }}>
           Já tem conta?{" "}
-          <Link to="/login" className="text-indigo-400 font-semibold hover:text-indigo-300 transition">
+          <Link to="/login" className="font-semibold transition" style={{ color: "#6366f1" }}
+            onMouseEnter={e => { e.target.style.color = "#4f46e5"; }}
+            onMouseLeave={e => { e.target.style.color = "#6366f1"; }}>
             Fazer login
           </Link>
         </p>
-        <p className="text-center text-white/20 text-xs mt-4">
+        <p className="text-center text-xs mt-4" style={{ color: "#94A3B8" }}>
           CEULP · UFT · UniCatólica · Afya · IFTO · ITOP
         </p>
       </motion.div>

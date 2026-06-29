@@ -16,12 +16,10 @@ import {
 } from "react-icons/fi";
 import { MdOutlineDirectionsCar } from "react-icons/md";
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
 };
 
 function formatarMes(mesStr) {
@@ -31,22 +29,28 @@ function formatarMes(mesStr) {
   return `${nomes[parseInt(mes) - 1]} ${ano}`;
 }
 
-function StatCard({ icone, valor, label, cor, delay = 0 }) {
+const STAT_ACCENTS = [
+  { bg: "#ECFDF5", color: "#059669" },
+  { bg: "#EEF2FF", color: "#6366f1" },
+  { bg: "#EFF6FF", color: "#3b82f6" },
+];
+
+function StatCard({ icone, valor, label, cor, accentBg, delay = 0 }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
       className="rounded-2xl p-6 flex flex-col gap-3"
-      style={GLASS}
+      style={CARD}
     >
       <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: `${cor}22`, border: `1px solid ${cor}44` }}>
+        style={{ background: accentBg }}>
         <span style={{ color: cor }}>{icone}</span>
       </div>
       <div>
-        <p className="text-2xl font-extrabold text-white">{valor}</p>
-        <p className="text-xs font-medium uppercase tracking-wide mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <p className="text-2xl font-extrabold" style={{ color: "#0F172A" }}>{valor}</p>
+        <p className="text-xs font-medium uppercase tracking-wide mt-0.5" style={{ color: "#94A3B8" }}>
           {label}
         </p>
       </div>
@@ -56,10 +60,10 @@ function StatCard({ icone, valor, label, cor, delay = 0 }) {
 
 function SkeletonStat() {
   return (
-    <div className="rounded-2xl p-6 animate-pulse" style={GLASS}>
-      <div className="w-11 h-11 rounded-xl mb-3" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-7 rounded w-24 mb-2" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-3 rounded w-32" style={{ background: "rgba(255,255,255,0.06)" }} />
+    <div className="rounded-2xl p-6 animate-pulse" style={CARD}>
+      <div className="w-11 h-11 rounded-xl mb-3" style={{ background: "#F1F5F9" }} />
+      <div className="h-7 rounded w-24 mb-2" style={{ background: "#F1F5F9" }} />
+      <div className="h-3 rounded w-32" style={{ background: "#F1F5F9" }} />
     </div>
   );
 }
@@ -86,15 +90,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-
-      {/* Blobs */}
-      <motion.div
-        className="absolute rounded-full pointer-events-none w-[500px] h-[500px] -top-32 -left-32 opacity-20"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 40, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-      />
+      style={{ background: "#F4F7FB" }}>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 pt-8 pb-12">
 
@@ -103,9 +99,9 @@ export default function Dashboard() {
           <button
             onClick={() => navigate("/")}
             className="flex items-center gap-2 text-sm font-medium mb-6 transition-colors"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-            onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.7)"; }}
-            onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }}
+            style={{ color: "#94A3B8" }}
+            onMouseEnter={e => { e.currentTarget.style.color = "#0F172A"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "#94A3B8"; }}
           >
             <FiArrowLeft size={15} />
             Voltar
@@ -113,12 +109,12 @@ export default function Dashboard() {
 
           <div className="flex items-center gap-4 mb-8">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
-              style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.35)" }}>
-              <FiBarChart2 className="text-indigo-400 text-2xl" />
+              style={{ background: "#EEF2FF" }}>
+              <FiBarChart2 className="text-indigo-500 text-2xl" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-white">Dashboard de Ganhos</h1>
-              <p className="text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <h1 className="text-2xl md:text-3xl font-extrabold" style={{ color: "#0F172A" }}>Dashboard de Ganhos</h1>
+              <p className="text-sm mt-0.5" style={{ color: "#64748B" }}>
                 Resumo das suas corridas concluídas
               </p>
             </div>
@@ -135,7 +131,8 @@ export default function Dashboard() {
                 icone={<FiDollarSign size={20} />}
                 valor={formatarMoeda(dados?.total_ganho ?? 0)}
                 label="Total ganho"
-                cor="#10b981"
+                cor="#059669"
+                accentBg="#ECFDF5"
                 delay={0}
               />
               <StatCard
@@ -143,6 +140,7 @@ export default function Dashboard() {
                 valor={dados?.total_concluidas ?? 0}
                 label="Caronas concluídas"
                 cor="#6366f1"
+                accentBg="#EEF2FF"
                 delay={0.1}
               />
               <StatCard
@@ -150,6 +148,7 @@ export default function Dashboard() {
                 valor={dados?.total_passageiros ?? 0}
                 label="Passageiros transportados"
                 cor="#3b82f6"
+                accentBg="#EFF6FF"
                 delay={0.2}
               />
             </>
@@ -162,29 +161,29 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.4 }}
           className="rounded-2xl p-6"
-          style={GLASS}
+          style={CARD}
         >
           <div className="flex items-center gap-2 mb-5">
-            <FiTrendingUp className="text-indigo-400" />
-            <h2 className="font-bold text-white text-base">Ganhos por mês</h2>
-            <span className="text-xs ml-auto" style={{ color: "rgba(255,255,255,0.3)" }}>últimos 6 meses</span>
+            <FiTrendingUp className="text-indigo-500" />
+            <h2 className="font-bold text-base" style={{ color: "#0F172A" }}>Ganhos por mês</h2>
+            <span className="text-xs ml-auto" style={{ color: "#94A3B8" }}>últimos 6 meses</span>
           </div>
 
           {carregando ? (
             <div className="space-y-3">
               {[0, 1, 2].map(i => (
                 <div key={i} className="animate-pulse flex items-center gap-3">
-                  <div className="h-3 rounded w-14 shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
-                  <div className="h-6 rounded flex-1" style={{ background: "rgba(255,255,255,0.06)", width: `${30 + i * 20}%`, maxWidth: "100%" }} />
-                  <div className="h-3 rounded w-16 shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
+                  <div className="h-3 rounded w-14 shrink-0" style={{ background: "#F1F5F9" }} />
+                  <div className="h-6 rounded flex-1" style={{ background: "#F1F5F9", width: `${30 + i * 20}%`, maxWidth: "100%" }} />
+                  <div className="h-3 rounded w-16 shrink-0" style={{ background: "#F1F5F9" }} />
                 </div>
               ))}
             </div>
           ) : !dados?.por_mes?.length ? (
             <div className="flex flex-col items-center py-10 text-center">
-              <FiCalendar className="text-white/20 text-4xl mb-3" />
-              <p className="text-sm font-medium text-white/40">Nenhuma carona concluída ainda</p>
-              <p className="text-xs text-white/25 mt-1">Conclua caronas para ver seus ganhos aqui</p>
+              <FiCalendar className="text-4xl mb-3" style={{ color: "#94A3B8" }} />
+              <p className="text-sm font-medium" style={{ color: "#64748B" }}>Nenhuma carona concluída ainda</p>
+              <p className="text-xs mt-1" style={{ color: "#94A3B8" }}>Conclua caronas para ver seus ganhos aqui</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -198,10 +197,10 @@ export default function Dashboard() {
                     transition={{ delay: 0.05 * i }}
                     className="flex items-center gap-3"
                   >
-                    <span className="text-xs font-medium w-14 shrink-0 text-right" style={{ color: "rgba(255,255,255,0.5)" }}>
+                    <span className="text-xs font-medium w-14 shrink-0 text-right" style={{ color: "#64748B" }}>
                       {formatarMes(m.mes)}
                     </span>
-                    <div className="flex-1 h-7 rounded-lg overflow-hidden relative" style={{ background: "rgba(255,255,255,0.05)" }}>
+                    <div className="flex-1 h-7 rounded-lg overflow-hidden relative" style={{ background: "#F1F5F9" }}>
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
@@ -209,11 +208,11 @@ export default function Dashboard() {
                         className="absolute inset-y-0 left-0 rounded-lg"
                         style={{ background: "linear-gradient(90deg,#6366f1,#3b82f6)", minWidth: pct > 0 ? 8 : 0 }}
                       />
-                      <span className="absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-white/60">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-xs font-semibold" style={{ color: "#64748B" }}>
                         {m.caronas} {m.caronas === 1 ? "carona" : "caronas"}
                       </span>
                     </div>
-                    <span className="text-xs font-bold w-20 shrink-0" style={{ color: "#6ee7b7" }}>
+                    <span className="text-xs font-bold w-20 shrink-0" style={{ color: "#059669" }}>
                       {formatarMoeda(m.ganho)}
                     </span>
                   </motion.div>
@@ -230,7 +229,7 @@ export default function Dashboard() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
             className="text-center text-xs mt-6"
-            style={{ color: "rgba(255,255,255,0.2)" }}
+            style={{ color: "#94A3B8" }}
           >
             Ganhos estimados com base nas vagas ocupadas nas caronas concluídas.
           </motion.p>

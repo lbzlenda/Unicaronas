@@ -48,33 +48,20 @@ function buildWhatsAppUrl(telefone, carona) {
   return `https://wa.me/${internacional}?text=${msg}`;
 }
 
-const GLASS = {
-  background: "rgba(255,255,255,0.06)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.12)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E9EEF4",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)",
 };
-
-function Blob({ className, style, animate }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      style={style}
-      animate={animate}
-      transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-    />
-  );
-}
 
 function SkeletonCard() {
   return (
-    <div className="rounded-2xl p-5 animate-pulse" style={GLASS}>
-      <div className="h-4 rounded w-3/4 mb-3" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-3 rounded w-1/2 mb-2" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-3 rounded w-2/5 mb-2" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-3 rounded w-1/3 mb-4" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="h-9 rounded-xl w-28" style={{ background: "rgba(255,255,255,0.08)" }} />
+    <div className="rounded-2xl p-5 animate-pulse" style={CARD}>
+      <div className="h-4 rounded w-3/4 mb-3" style={{ background: "#F1F5F9" }} />
+      <div className="h-3 rounded w-1/2 mb-2" style={{ background: "#F1F5F9" }} />
+      <div className="h-3 rounded w-2/5 mb-2" style={{ background: "#F1F5F9" }} />
+      <div className="h-3 rounded w-1/3 mb-4" style={{ background: "#F1F5F9" }} />
+      <div className="h-9 rounded-xl w-28" style={{ background: "#F1F5F9" }} />
     </div>
   );
 }
@@ -83,13 +70,13 @@ function EmptyState({ tipo, onAction }) {
   return (
     <div className="col-span-2 flex flex-col items-center justify-center py-20 text-center">
       <div className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
-        style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)" }}>
-        <MdOutlineDirectionsCar className="text-indigo-400 text-4xl" />
+        style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.2)" }}>
+        <MdOutlineDirectionsCar style={{ color: "#6366f1", fontSize: "2.25rem" }} />
       </div>
-      <h3 className="text-lg font-semibold text-white mb-1">
+      <h3 className="text-lg font-semibold mb-1" style={{ color: "#0F172A" }}>
         {tipo === "motorista" ? "Nenhuma carona oferecida" : "Nenhuma reserva encontrada"}
       </h3>
-      <p className="text-white/40 text-sm max-w-xs mb-4">
+      <p className="text-sm max-w-xs mb-4" style={{ color: "#64748B" }}>
         {tipo === "motorista"
           ? "Você ainda não ofereceu nenhuma carona. Que tal começar agora?"
           : "Você ainda não reservou nenhuma carona. Explore as disponíveis na Home."}
@@ -125,7 +112,7 @@ function StarRating({ value, onChange, readonly = false }) {
           <FaStar
             className="text-lg"
             style={{
-              color: (hover || value) >= n ? "#f59e0b" : "rgba(255,255,255,0.2)",
+              color: (hover || value) >= n ? "#f59e0b" : "#E2E8F0",
               filter: (hover || value) >= n ? "drop-shadow(0 0 4px #f59e0b88)" : "none",
               transition: "color 0.15s, filter 0.15s",
             }}
@@ -178,14 +165,14 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
       whileHover={{ scale: 1.01 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className="rounded-2xl overflow-hidden flex flex-col"
-      style={GLASS}
+      style={CARD}
     >
       <div className="h-1.5 w-full" style={{
-        background: lotado ? "rgba(255,255,255,0.1)" : "linear-gradient(90deg,#3b82f6,#6366f1)"
+        background: lotado ? "#E2E8F0" : "linear-gradient(90deg,#3b82f6,#6366f1)"
       }} />
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-3">
-          <p className="font-bold text-white text-base leading-snug flex items-center gap-1.5 flex-wrap">
+          <p className="font-bold text-base leading-snug flex items-center gap-1.5 flex-wrap" style={{ color: "#0F172A" }}>
             <span>{carona.origem}</span>
             <FiArrowRight className="text-indigo-400 shrink-0" />
             <span>{carona.destino}</span>
@@ -212,36 +199,36 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
           </div>
         </div>
 
-        <div className="space-y-1.5 text-sm mb-3 flex-1" style={{ color: "rgba(255,255,255,0.5)" }}>
+        <div className="space-y-1.5 text-sm mb-3 flex-1" style={{ color: "#64748B" }}>
           {carona.data_saida && (
             <div className="flex items-center gap-2">
               <FiCalendar className="text-indigo-400 shrink-0" />
-              <span><strong className="text-white">{formatarData(carona.data_saida)}</strong></span>
+              <span><strong style={{ color: "#0F172A" }}>{formatarData(carona.data_saida)}</strong></span>
             </div>
           )}
           <div className="flex items-center gap-2">
             <FiClock className="text-indigo-400 shrink-0" />
-            <span>Saída às <strong className="text-white">{carona.horario_saida}</strong></span>
+            <span>Saída às <strong style={{ color: "#0F172A" }}>{carona.horario_saida}</strong></span>
           </div>
           <div className="flex items-center gap-2">
             <FiDollarSign className="text-indigo-400 shrink-0" />
-            <span><strong className="text-white">{formatarMoeda(carona.valor)}</strong> por vaga</span>
+            <span><strong style={{ color: "#0F172A" }}>{formatarMoeda(carona.valor)}</strong> por vaga</span>
           </div>
           <div className="flex items-center gap-2">
             <FiUsers className="text-indigo-400 shrink-0" />
             <span>
-              <strong className="text-white">{carona.vagas_disponiveis}</strong> de{" "}
-              <strong className="text-white">{carona.vagas}</strong> vagas livres
+              <strong style={{ color: "#0F172A" }}>{carona.vagas_disponiveis}</strong> de{" "}
+              <strong style={{ color: "#0F172A" }}>{carona.vagas}</strong> vagas livres
             </span>
           </div>
         </div>
 
         <div className="mb-4">
-          <div className="flex items-center justify-between text-xs mb-1" style={{ color: "rgba(255,255,255,0.3)" }}>
+          <div className="flex items-center justify-between text-xs mb-1" style={{ color: "#94A3B8" }}>
             <span>Ocupação</span>
             <span>{ocupacaoPct}%</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "#F1F5F9" }}>
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
@@ -287,7 +274,7 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
               onClick={togglePassageiros}
               disabled={carregandoPassageiros}
               className="flex items-center justify-between w-full py-2 rounded-xl text-xs font-semibold transition-all"
-              style={{ color: "rgba(255,255,255,0.45)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+              style={{ color: "#64748B", background: "#F8FAFC", border: "1px solid #E9EEF4" }}
             >
               <span className="flex items-center gap-1.5 px-3">
                 <FiUsers size={12} />
@@ -303,14 +290,14 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
             {mostrandoPassageiros && passageiros !== null && (
               <div className="mt-2 space-y-1.5">
                 {passageiros.length === 0 ? (
-                  <p className="text-xs text-center py-2" style={{ color: "rgba(255,255,255,0.25)" }}>Nenhum passageiro.</p>
+                  <p className="text-xs text-center py-2" style={{ color: "#94A3B8" }}>Nenhum passageiro.</p>
                 ) : passageiros.map(p => (
                   <div key={p.reserva_id} className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    style={{ background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
                     <div className="flex items-center gap-2 min-w-0">
                       {p.foto_perfil ? (
                         <img src={p.foto_perfil} alt="" className="w-7 h-7 rounded-full object-cover shrink-0"
-                          style={{ border: "1px solid rgba(255,255,255,0.15)" }} />
+                          style={{ border: "1px solid #E2E8F0" }} />
                       ) : (
                         <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold text-white"
                           style={{ background: "linear-gradient(135deg,#6366f1,#3b82f6)" }}>
@@ -318,9 +305,9 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-white truncate">{p.nome?.split(" ")[0]}</p>
+                        <p className="text-xs font-semibold truncate" style={{ color: "#0F172A" }}>{p.nome?.split(" ")[0]}</p>
                         {p.telefone && (
-                          <p className="text-[10px] truncate" style={{ color: "rgba(255,255,255,0.3)" }}>{p.telefone}</p>
+                          <p className="text-[10px] truncate" style={{ color: "#94A3B8" }}>{p.telefone}</p>
                         )}
                       </div>
                     </div>
@@ -335,9 +322,9 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                         onClick={() => onAbrirChat(p.reserva_id, p.nome?.split(" ")[0], p.foto_perfil)}
                         title="Abrir chat"
                         className="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
-                        style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc" }}
-                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.3)"; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.15)"; }}
+                        style={{ background: "#EEF2FF", color: "#6366f1" }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "#E0E7FF"; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = "#EEF2FF"; }}
                       >
                         <FiMessageCircle size={13} />
                       </button>
@@ -353,9 +340,9 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
         <button
           onClick={() => onRepublicar(carona)}
           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 mb-2"
-          style={{ color: "#a5b4fc", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.25)" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.18)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
+          style={{ color: "#6366f1", background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.14)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.08)"; }}
         >
           <FiRefreshCw size={13} />
           Republicar carona
@@ -371,13 +358,13 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
               exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.15 }}
               className="rounded-xl p-3 flex flex-col gap-2"
-              style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)" }}
+              style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: "#fca5a5" }}>
+              <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: "#EF4444" }}>
                 <FiAlertTriangle />
                 Confirmar exclusão?
               </div>
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="text-xs" style={{ color: "#64748B" }}>
                 Esta ação não pode ser desfeita. Os passageiros perderão suas vagas.
               </p>
               <div className="flex gap-2 mt-1">
@@ -385,7 +372,7 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                   onClick={() => { setConfirmando(false); onExcluir(carona.id); }}
                   disabled={excluindo === carona.id}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all disabled:opacity-50"
-                  style={{ background: "rgba(239,68,68,0.25)", color: "#fca5a5" }}
+                  style={{ background: "rgba(239,68,68,0.12)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)" }}
                 >
                   {excluindo === carona.id ? (
                     <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
@@ -398,7 +385,7 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
                 <button
                   onClick={() => setConfirmando(false)}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all"
-                  style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.55)" }}
+                  style={{ background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }}
                 >
                   <FiX size={12} /> Cancelar
                 </button>
@@ -413,9 +400,9 @@ function CardCaronaMotorista({ carona, onExcluir, excluindo, onRepublicar, onSta
               onClick={() => setConfirmando(true)}
               disabled={excluindo === carona.id}
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ color: "#fca5a5", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.18)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; }}
+              style={{ color: "#EF4444", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.14)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(239,68,68,0.08)"; }}
             >
               <FiTrash2 />
               Excluir carona
@@ -449,56 +436,54 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
       whileHover={{ scale: 1.01 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className="rounded-2xl overflow-hidden flex flex-col"
-      style={GLASS}
+      style={CARD}
     >
       <div className="h-1.5 w-full" style={{
-        background: historico
-          ? "rgba(255,255,255,0.08)"
-          : "linear-gradient(90deg,#3b82f6,#6366f1)"
+        background: historico ? "#E2E8F0" : "linear-gradient(90deg,#3b82f6,#6366f1)"
       }} />
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: "rgba(99,102,241,0.2)", border: "1px solid rgba(99,102,241,0.3)" }}>
-            <MdOutlineDirectionsCar className="text-indigo-400 text-xl" />
+            style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.2)" }}>
+            <MdOutlineDirectionsCar style={{ color: "#6366f1", fontSize: "1.25rem" }} />
           </div>
-          <p className="font-bold text-white text-base leading-snug flex items-center gap-1.5 flex-wrap pt-1">
+          <p className="font-bold text-base leading-snug flex items-center gap-1.5 flex-wrap pt-1" style={{ color: "#0F172A" }}>
             <span>{reserva.carona?.origem ?? "—"}</span>
             <FiArrowRight className="text-indigo-400 shrink-0" />
             <span>{reserva.carona?.destino ?? "—"}</span>
           </p>
         </div>
 
-        <div className="space-y-1.5 text-sm flex-1" style={{ color: "rgba(255,255,255,0.5)" }}>
+        <div className="space-y-1.5 text-sm flex-1" style={{ color: "#64748B" }}>
           {reserva.carona?.data_saida && (
             <div className="flex items-center gap-2">
               <FiCalendar className="text-indigo-400 shrink-0" />
-              <span><strong className="text-white">{formatarData(reserva.carona.data_saida)}</strong></span>
+              <span><strong style={{ color: "#0F172A" }}>{formatarData(reserva.carona.data_saida)}</strong></span>
             </div>
           )}
           <div className="flex items-center gap-2">
             <FiClock className="text-indigo-400 shrink-0" />
-            <span>Saída às <strong className="text-white">{reserva.carona?.horario_saida ?? "—"}</strong></span>
+            <span>Saída às <strong style={{ color: "#0F172A" }}>{reserva.carona?.horario_saida ?? "—"}</strong></span>
           </div>
           <div className="flex items-center gap-2">
             <FiDollarSign className="text-indigo-400 shrink-0" />
             <span>
-              <strong className="text-white">
+              <strong style={{ color: "#0F172A" }}>
                 {reserva.carona ? formatarMoeda(reserva.carona.valor) : "—"}
               </strong>{" "}por vaga
             </span>
           </div>
           <div className="flex items-center gap-2">
             <FiUsers className="text-indigo-400 shrink-0" />
-            <span><strong className="text-white">{reserva.carona?.vagas_disponiveis ?? "—"}</strong> vagas restantes</span>
+            <span><strong style={{ color: "#0F172A" }}>{reserva.carona?.vagas_disponiveis ?? "—"}</strong> vagas restantes</span>
           </div>
         </div>
 
-        <div className="mt-4 pt-3 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="mt-4 pt-3 flex flex-col gap-2" style={{ borderTop: "1px solid #E2E8F0" }}>
           {historico ? (
             /* Avaliação para caronas no histórico */
             <div>
-              <p className="text-xs font-medium mb-2" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="text-xs font-medium mb-2" style={{ color: "#64748B" }}>
                 {avaliacaoAtual ? "Sua avaliação:" : "Avalie esta carona:"}
               </p>
               <div className="flex items-center gap-3">
@@ -551,9 +536,9 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
                 whileTap={{ scale: 0.97 }}
                 onClick={() => onAbrirChat(reserva.id, reserva.carona?.motorista_nome?.split(" ")[0] ?? "Motorista", null)}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all"
-                style={{ background: "rgba(99,102,241,0.1)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.25)" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.18)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
+                style={{ background: "#EEF2FF", color: "#6366f1", border: "1px solid rgba(99,102,241,0.2)" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "#E0E7FF"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "#EEF2FF"; }}
               >
                 <FiMessageCircle size={14} />
                 Chat com motorista
@@ -570,13 +555,13 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
                     className="rounded-xl p-3 flex flex-col gap-2"
                     style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
                   >
-                    <p className="text-xs font-semibold" style={{ color: "#fca5a5" }}>Cancelar esta reserva?</p>
+                    <p className="text-xs font-semibold" style={{ color: "#EF4444" }}>Cancelar esta reserva?</p>
                     <div className="flex gap-2">
                       <button
                         onClick={() => { setConfirmandoCancelar(false); onCancelar(reserva.id); }}
                         disabled={cancelando === reserva.id}
                         className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold disabled:opacity-50"
-                        style={{ background: "rgba(239,68,68,0.2)", color: "#fca5a5" }}
+                        style={{ background: "rgba(239,68,68,0.12)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)" }}
                       >
                         {cancelando === reserva.id
                           ? <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -586,7 +571,7 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
                       <button
                         onClick={() => setConfirmandoCancelar(false)}
                         className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold"
-                        style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.5)" }}
+                        style={{ background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }}
                       >
                         <FiCheck size={12} /> Manter
                       </button>
@@ -600,9 +585,9 @@ function CardReserva({ reserva, historico, avaliacaoAtual, onAvaliar, cancelando
                     exit={{ opacity: 0 }}
                     onClick={() => setConfirmandoCancelar(true)}
                     className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl text-xs font-medium transition-all"
-                    style={{ color: "rgba(255,255,255,0.3)", background: "transparent", border: "1px solid rgba(255,255,255,0.08)" }}
-                    onMouseEnter={e => { e.currentTarget.style.color = "#fca5a5"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+                    style={{ color: "#94A3B8", background: "transparent", border: "1px solid #E2E8F0" }}
+                    onMouseEnter={e => { e.currentTarget.style.color = "#EF4444"; e.currentTarget.style.borderColor = "rgba(239,68,68,0.3)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.borderColor = "#E2E8F0"; }}
                   >
                     <FiXCircle size={12} />
                     Cancelar reserva
@@ -738,19 +723,7 @@ function MinhasCaronas() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0f172a 40%, #1e1b4b 100%)" }}>
-
-      <Blob
-        className="w-[600px] h-[600px] -top-48 -left-32 opacity-20"
-        style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)" }}
-        animate={{ x: [0, 50, 0], y: [0, 40, 0], scale: [1, 1.1, 1] }}
-      />
-      <Blob
-        className="w-96 h-96 -bottom-32 -right-16 opacity-15"
-        style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }}
-        animate={{ x: [0, -40, 0], y: [0, -30, 0] }}
-      />
+    <div className="min-h-screen relative overflow-x-hidden" style={{ background: "#F4F7FB" }}>
 
       {/* Hero */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 pt-8 pb-4">
@@ -759,14 +732,14 @@ function MinhasCaronas() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="rounded-2xl p-6"
-          style={GLASS}
+          style={CARD}
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-1">
+              <h1 className="text-2xl md:text-3xl font-extrabold mb-1" style={{ color: "#0F172A" }}>
                 {isMotorista ? "Minhas Caronas" : "Minhas Reservas"}
               </h1>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="text-sm" style={{ color: "#64748B" }}>
                 {isMotorista
                   ? "Gerencie as caronas que você oferece."
                   : "Veja as caronas que você reservou."}
@@ -789,22 +762,22 @@ function MinhasCaronas() {
 
           {!carregando && (
             <div className="mt-5 grid grid-cols-2 gap-3 max-w-xs">
-              <div className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="rounded-xl px-4 py-3" style={{ background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <MdOutlineDirectionsCar style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem" }} />
-                  <p className="text-xs uppercase tracking-wide font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  <MdOutlineDirectionsCar style={{ color: "#64748B", fontSize: "0.85rem" }} />
+                  <p className="text-xs uppercase tracking-wide font-medium" style={{ color: "#64748B" }}>
                     {isMotorista ? "Caronas" : "Reservas"}
                   </p>
                 </div>
-                <p className="text-white text-2xl font-bold">{itens.length}</p>
+                <p className="text-2xl font-bold" style={{ color: "#0F172A" }}>{itens.length}</p>
               </div>
               {isMotorista && (
-                <div className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="rounded-xl px-4 py-3" style={{ background: "#F8FAFC", border: "1px solid #E9EEF4" }}>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <FiUsers style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem" }} />
-                    <p className="text-xs uppercase tracking-wide font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>Vagas livres</p>
+                    <FiUsers style={{ color: "#64748B", fontSize: "0.85rem" }} />
+                    <p className="text-xs uppercase tracking-wide font-medium" style={{ color: "#64748B" }}>Vagas livres</p>
                   </div>
-                  <p className="text-white text-2xl font-bold">
+                  <p className="text-2xl font-bold" style={{ color: "#0F172A" }}>
                     {itens.reduce((acc, c) => acc + (c.vagas_disponiveis ?? 0), 0)}
                   </p>
                 </div>
@@ -830,14 +803,17 @@ function MinhasCaronas() {
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
                 style={aba === key
                   ? { background: "linear-gradient(135deg,#6366f1,#3b82f6)", color: "#fff", boxShadow: "0 4px 14px rgba(99,102,241,0.4)" }
-                  : { background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.45)", border: "1px solid rgba(255,255,255,0.08)" }
+                  : { background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }
                 }
               >
                 {key === "ativas" ? <FiClock size={13} /> : <FiCalendar size={13} />}
                 {label}
                 <span
                   className="text-xs px-1.5 py-0.5 rounded-full font-bold"
-                  style={{ background: aba === key ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.1)", color: aba === key ? "#fff" : "rgba(255,255,255,0.5)" }}
+                  style={aba === key
+                    ? { background: "rgba(255,255,255,0.25)", color: "#fff" }
+                    : { background: "#E2E8F0", color: "#64748B" }
+                  }
                 >
                   {count}
                 </span>
@@ -862,11 +838,11 @@ function MinhasCaronas() {
               aba === "historico" ? (
                 <div className="col-span-2 flex flex-col items-center justify-center py-16 text-center">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-                    style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.3)" }}>
-                    <FiCalendar className="text-indigo-400 text-2xl" />
+                    style={{ background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.2)" }}>
+                    <FiCalendar style={{ color: "#6366f1", fontSize: "1.5rem" }} />
                   </div>
-                  <p className="text-white font-semibold mb-1">Nenhum histórico ainda</p>
-                  <p className="text-white/40 text-sm">As caronas concluídas aparecerão aqui.</p>
+                  <p className="font-semibold mb-1" style={{ color: "#0F172A" }}>Nenhum histórico ainda</p>
+                  <p className="text-sm" style={{ color: "#64748B" }}>As caronas concluídas aparecerão aqui.</p>
                 </div>
               ) : (
                 <EmptyState
